@@ -24,7 +24,7 @@ class HistorialEquipoController extends Controller
             ->join('salas', 'equipos.sala_id', '=', 'salas.id')
             ->join('users', 'reservas.user_id', '=', 'users.id')
             ->leftJoin('capacitador_reserva', 'reservas.id', '=', 'capacitador_reserva.reserva_id')
-            ->leftJoin('capacitadors', 'capacitador_reserva.capacitador_id', '=', 'capacitadors.id')
+            ->leftJoin('capacitadores', 'capacitador_reserva.capacitador_id', '=', 'capacitadores.id')
             ->select([
                 'control_uso_equipos.id',
                 'control_uso_equipos.estado_pantalla',
@@ -41,7 +41,7 @@ class HistorialEquipoController extends Controller
                 'reservas.responsable',
                 'reservas.entidad',
                 'users.name as usuario_creador',
-                DB::raw('GROUP_CONCAT(CONCAT(capacitadors.nombre, " ", capacitadors.apellido) SEPARATOR ", ") as capacitadores')
+                DB::raw('GROUP_CONCAT(CONCAT(capacitadores.nombre, " ", capacitadores.apellido) SEPARATOR ", ") as capacitadores')
             ])
             ->groupBy([
                 'control_uso_equipos.id',
