@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('capacitador_reserva_pivot', function (Blueprint $table) {
+        Schema::create('capacitador_reserva', function (Blueprint $table) {
             $table->id();
             $table->foreignId('capacitador_id')->constrained('capacitadores')->onDelete('cascade');
             $table->foreignId('reserva_id')->constrained('reservas')->onDelete('cascade');
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('capacitador_reserva_pivot');
+        Schema::dropIfExists('capacitador_reserva');
     }
 };
