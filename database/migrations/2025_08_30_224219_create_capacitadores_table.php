@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('capacitadores', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('apellido');
-            $table->string('dni')->unique();
-            $table->string('telefono');
-            $table->string('correo');
+            $table->string('nombre',150);
+            $table->string('apellido',150);
+            $table->string('dni',9)->nullable();
+            $table->string('telefono')->nullable();
+            $table->string('correo')->nullable();;
             $table->timestamps();
         });
     }
