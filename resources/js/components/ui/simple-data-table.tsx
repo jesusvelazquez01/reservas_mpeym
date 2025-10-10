@@ -32,10 +32,10 @@ export function SimpleDataTable<TData, TValue>({
 
   return (
     <div className="overflow-hidden rounded-md border">
-      <Table>
+      <Table className="font-serif">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="text-xl text-black ">
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>

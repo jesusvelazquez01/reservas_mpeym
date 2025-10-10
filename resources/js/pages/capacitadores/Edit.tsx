@@ -324,7 +324,7 @@ export default function Edit() {
                         </div>
                     </div>
 
-                            </CardContent>
+                    </CardContent>
                                     <CardFooter className="flex justify-end gap-2">
                                         <Button
                                             type="button"
@@ -335,21 +335,21 @@ export default function Edit() {
                                             Cancelar
                                         </Button>
                                         <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-                                                            <AlertDialogContent>
-                                                                <AlertDialogHeader>
-                                                                    <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
-                                                                    <AlertDialogDescription>
-                                                                        Tienes datos sin guardar. ¿Estás seguro que deseas salir sin guardar los cambios?
-                                                                    </AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel>Continuar cargando</AlertDialogCancel>
-                                                                    <AlertDialogAction onClick={confirmCancel}>
-                                                                        Descartar cambios
-                                                                    </AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                            </AlertDialog>
+                                            <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
+                                             <AlertDialogDescription>
+                                            Tienes datos sin guardar. ¿Estás seguro que deseas salir sin guardar los cambios?
+                                             </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                        <AlertDialogCancel>Continuar cargando</AlertDialogCancel>
+                                             <AlertDialogAction onClick={confirmCancel}>
+                                                    Descartar cambios
+                                           </AlertDialogAction>
+                                       </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                        </AlertDialog>
                                         <Button
                                             type="submit"
                                             disabled={processing}

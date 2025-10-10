@@ -52,16 +52,13 @@ Route::resource('capacitadores', CapacitadorController::class)->parameters([
     'capacitadores' => 'capacitador'
 ]);
 //RUTAS DE CONTROL USO
- Route::get('/control-uso', [ControlUsoController::class, 'index'])->name('control-uso.index');
-    Route::post('/control-uso', [ControlUsoController::class, 'store'])->name('control-uso.store');
-    Route::put('/control-uso/{control}', [ControlUsoController::class, 'update'])->name('control-uso.update');
-    Route::delete('/control-uso/{control}', [ControlUsoController::class, 'destroy'])->name('control-uso.destroy');
+Route::resource('control-uso', ControlUsoController::class)->parameters([
+    'control-uso' => 'controlUso'
+]);
 //REPORTE DE USO DE SALAS Y EQUIPOS
  Route::get('/admin/reportes-uso', [ReporteController::class, 'usoSalas'])->name('reporte.usoSalas');
     Route::get('/admin/reportes-equipos', [ReporteEquipoController::class, 'usoEquipos'])->name('reporte.usoEquipos');
     Route::get('/admin/historial-equipos', [HistorialEquipoController::class, 'index'])->name('historial.equipos');
-
-    
 });
 Route::middleware(['auth','verified','role:admin'])->group(function () {
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');

@@ -104,22 +104,62 @@ class ResponsableController extends Controller
         ]);
     }
 
-    public function update(Request $request, Responsable $responsable)
-    {
+public function update(Request $request, Responsable $responsable)
+{
+    try {
         $request->validate([
             'nombre' => 'required|string|max:255',
             'apellido' => 'required|string|max:255',
             'dni' => 'nullable|string|max:255',
-            'telefono'=>'nullable|string|max:255',
-            'correo'=>'nullable|string|max:255',
-            'area'=>'required|string|max:255',
+            'telefono' => 'nullable|string|max:255',
+            'correo' => 'nullable|string|max:255',
+            'area' => 'required|string|max:255',
+        ], [
+            'nombre.required' => 'El nombre es requerido.',
+            'apellido.required' => 'El apellido es requerido.',
+            'area.required' => 'El área es requerida.',
         ]);
 
+        // 🔍 Verificación de duplicado (ignorando al propio responsable)
+        $errores = [];
+        if ($request->dni && Responsable::where('dni', $request->dni)
+            ->where('id', '!=', $responsable->id)
+            ->exists()) 
+        {
+            $errores['dni'] = 'Ya existe un responsable con este DNI.';
+        }
+
+        if ($request->correo && Responsable::where('correo', $request->correo)
+            ->where('id', '!=', $responsable->id)
+            ->exists()) 
+        {
+            $errores['correo'] = 'Ya existe un responsable con este correo.';
+        }
+
+        if (!empty($errores)) {
+            return redirect()
+                ->back()
+                ->withErrors($errores)
+                ->withInput()
+                ->with('warning', 'Se encontraron datos duplicados.');
+        }
+
+        // 🧩 Actualizar datos
         $responsable->update($request->all());
 
-        return redirect()->route('responsables.index')
-        ->with('success', 'Responsable editado exitosamente.');;
-    }
+        return redirect()
+            ->route('responsables.index')
+            ->with('success', 'Responsable editado exitosamente.');
+
+    } catch (ValidationException $e) {
+        return redirect()
+            ->back()
+            ->withErrors($e->errors())
+            ->withInput()
+            ->with('warning', 'Corrige los errores del formulario.');
+    }  
+}
+
 
     public function destroy(Responsable $responsable)
     {

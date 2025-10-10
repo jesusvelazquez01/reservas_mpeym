@@ -68,10 +68,10 @@ export function ResponsablesDataTable<TData, TValue>({
         />
       </div>
       <div className="overflow-hidden rounded-md border">
-        <Table>
-          <TableHeader>
+        <Table >
+          <TableHeader className="text-xl">
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow key={headerGroup.id} >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>

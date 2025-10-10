@@ -87,6 +87,6 @@ class SalaController extends Controller
         $sala->delete();
 
         return redirect()->route('salas.index')
-        ->with('warning', 'Sala eliminado exitosamente.');;
+        ->with('success', 'Sala eliminado exitosamente.');;
     }
 }

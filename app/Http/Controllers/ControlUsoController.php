@@ -21,7 +21,7 @@ class ControlUsoController extends Controller
     
     public function index()
     {
-        return Inertia::render('control-uso/ControlUso', [
+        return Inertia::render('control-uso/Index', [
             'controles' => ControlUso::with('reserva.sala', 'reserva.user', 'reserva.capacitadores')
                 ->latest()->get(),
             'reservas' => Reserva::with('sala', 'user', 'capacitadores')
@@ -31,7 +31,16 @@ class ControlUsoController extends Controller
             'equiposPorSala' => Equipo::with('sala')->get()->groupBy('sala_id'),
         ]);
     }
-
+    public function create()
+    {
+        return Inertia::render('control-uso/Create', [
+            'reservas' => Reserva::with('sala', 'user', 'capacitadores')
+                ->whereDoesntHave('controlUso')
+                ->latest()->get(),
+            'equipos' => Equipo::with('sala')->get(),
+            'equiposPorSala' => Equipo::with('sala')->get()->groupBy('sala_id'),
+        ]);
+    }
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -75,7 +84,16 @@ class ControlUsoController extends Controller
 
         return redirect()->back()->with('success', 'Control de uso registrado.');
     }
-
+    public function edit(){
+        return Inertia::render('control-uso/Edit', [
+            'reservas' => Reserva::with('sala', 'user', 'capacitadores')
+                ->whereDoesntHave('controlUso')
+                ->latest()->get(),
+            'equipos' => Equipo::with('sala')->get(),
+            'equiposPorSala' => Equipo::with('sala')->get()->groupBy('sala_id'),
+        ]);
+        
+    }
     public function update(Request $request, ControlUso $control)
     {
 

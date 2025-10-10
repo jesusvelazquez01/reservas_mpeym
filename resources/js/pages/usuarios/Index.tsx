@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { SimpleDataTable } from '@/components/ui/simple-data-table';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { type BreadcrumbItem, type PageProps, type UserWithRoles } from '@/types';
-import { toast, ToastContainer } from 'react-toastify';
+
 import { normalizePaginatedData } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -22,14 +22,6 @@ export default function Index() {
 
     const handleDelete = (user: UserWithRoles) => {
         router.post(route('users.destroy', user.id), {
-            _method: 'delete',
-            preserveScroll: true,
-            onSuccess: () => {
-                toast.success('Usuario eliminado correctamente');
-            },
-            onError: () => {
-                toast.error('Error al eliminar el usuario');
-            },
         });
     };
 
@@ -122,25 +114,6 @@ export default function Index() {
 
                 <SimpleDataTable columns={columns} data={normalizedUsers.data} />
             </div>
-
-            <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-                toastStyle={{
-                    backgroundColor: '#ffffff',
-                    color: '#374151',
-                    borderRadius: '12px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
-                }}
-            />
         </AppLayout>
     );
 }

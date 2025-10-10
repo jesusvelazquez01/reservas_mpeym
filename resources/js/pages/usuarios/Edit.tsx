@@ -10,8 +10,8 @@ import type { PageProps, Role, UserWithRoles } from '@/types';
 import type { BreadcrumbItem } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
-  { title: 'Users', href: '/users' },
-  { title: 'Edit', href: '' },
+  { title: 'Usuarios', href: '/users' },
+  { title: 'Editar', href: '' },
 ];
 
 interface Props extends PageProps {
