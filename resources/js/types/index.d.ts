@@ -41,20 +41,43 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+//Interfaces de las entidades del sistema
+
 
 export interface Sala {
     id: number;
     nombre: string;
-    capacidad?: number;
-    ubicacion?: string;
+    capacidad: number;
+    ubicacion: string;
     created_at?: string;
     updated_at?: string;
 }
-
+export type Entidad = 
+    | "Ministra de Planificacion Estrategica y Modernización"
+    | "Dirección de Planeamiento Estratégico"
+    | "Dirección de Gobernanza Publica"
+    | "Jefatura de Área de Políticas Públicas"
+    | "Dirección de Gobierno Digital"
+    | "Dirección de Modernización de Gestión"
+    | "Dirección de Ciberseguridad"
+    | "Dirección de Infraestructura de Conectividad y Comunicación"
+    | "Dirección de Servicios Informáticos"
+    | "Jefatura de Área de Firma Digital y Documentación Electrónica"
+    | "Direccion Provincial de Hospitales"
+    | "Coordinación Territorial Estratégico"
+    | "Jefatura del Área de Recursos Humanos"
+    | "Jefatura del Área de Gestión Presupuestaria"
+    | "Jefatura de Despacho"
+    | "Coordinación de la Unidad Ejecutora Provincial de Transformación"
+    | "Coordinación de Infraestructura de Datos Espaciales"
+    | "Jefatura de Área de Gestión y Control"
+    | "Jefatura de Área de Comunicaciones"
+    | "Jefatura de Área de Auditoria"
+    | "Consejo de Planificación Estrategica de la Provincia de Jujuy";
 export interface Reserva {
     id: number;
     sala_id: number;
-    entidad: string;
+    entidad: Entidad;
     responsable: string;
     responsable_id?: string;
     motivo?: string;
@@ -81,7 +104,28 @@ export interface Equipo {
     created_at?: string;
     updated_at?: string;
 }
-
+export type Area = 
+    | "Ministra de Planificacion Estrategica y Modernización"
+    | "Dirección de Planeamiento Estratégico"
+    | "Dirección de Gobernanza Publica"
+    | "Jefatura de Área de Políticas Públicas"
+    | "Dirección de Gobierno Digital"
+    | "Dirección de Modernización de Gestión"
+    | "Dirección de Ciberseguridad"
+    | "Dirección de Infraestructura de Conectividad y Comunicación"
+    | "Dirección de Servicios Informáticos"
+    | "Jefatura de Área de Firma Digital y Documentación Electrónica"
+    | "Direccion Provincial de Hospitales"
+    | "Coordinación Territorial Estratégico"
+    | "Jefatura del Área de Recursos Humanos"
+    | "Jefatura del Área de Gestión Presupuestaria"
+    | "Jefatura de Despacho"
+    | "Coordinación de la Unidad Ejecutora Provincial de Transformación"
+    | "Coordinación de Infraestructura de Datos Espaciales"
+    | "Jefatura de Área de Gestión y Control"
+    | "Jefatura de Área de Comunicaciones"
+    | "Jefatura de Área de Auditoria"
+    | "Consejo de Planificación Estrategica de la Provincia de Jujuy";
 export interface Responsable {
     id: number;
     nombre: string;
@@ -89,7 +133,7 @@ export interface Responsable {
     dni?: string;
     telefono?: string;
     correo?: string;
-    area?: string;
+    area: Area;
     created_at?: string;
     updated_at?: string;
 }
@@ -132,9 +176,6 @@ export interface ControlUsoEquipo {
     created_at?: string;
     updated_at?: string;
 }
-
-
-
 export interface PaginatedData<T> {
     data: T[];
     current_page: number;
@@ -161,6 +202,11 @@ export interface PageProps{
     }
     roles: PaginatedData<Role> | {id: number; name: string}[];
     users: PaginatedData<UserWithRoles> [];
+    salas: PaginatedData<Sala>;
+    responsables: PaginatedData<Responsable>;
+    equipos: PaginatedData<Equipo>;
+    control_uso: PaginatedData<ControlUso>;
+    capacitadores: PaginatedData<Capacitador>;
 }
 
 
@@ -184,6 +230,14 @@ export interface UserWithRoles{
     name:string;
     email:string;
     roles:{id:number, name: string}[];
+}
+export interface PageProps{
+    flash:{
+        success?:string;
+         error?:string;
+         warning?:string;
+         info?:string;
+    }
 }
 
 export type PageProps<T = Record<string, unknown>> = SharedData & T;

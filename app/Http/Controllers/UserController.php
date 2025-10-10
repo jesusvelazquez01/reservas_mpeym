@@ -57,11 +57,11 @@ class UserController extends Controller
             $user->assignRole($validated['role']);
             return redirect()
                 ->route('users.index')
-                ->with('success', 'Record created successfully.');
+                ->with('success', 'Usuario creado exitosamente.');
         } catch (\Exception $e) {
             return redirect()
                 ->back()
-                ->with('error', 'Failed to create record: ' . $e->getMessage());
+                ->with('error', 'Error al crear el usuario: ' . $e->getMessage());
         }
     }
 
@@ -117,7 +117,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->back()
-                ->with('error', 'Failed to delete record: ' . $e->getMessage());
+                ->with('error', 'Error al eliminar el usuario: ' . $e->getMessage());
         }
     }
 }

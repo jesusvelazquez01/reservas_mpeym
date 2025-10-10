@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('capacitador_id')->constrained('capacitadores')->onDelete('cascade');
             $table->foreignId('reserva_id')->constrained('reservas')->onDelete('cascade');
-
             $table->timestamps();
             $table->unique(['capacitador_id', 'reserva_id']);
 

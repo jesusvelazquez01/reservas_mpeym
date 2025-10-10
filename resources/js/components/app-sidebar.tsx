@@ -1,11 +1,12 @@
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import {CalendarPlus2, UserRoundSearch, LaptopMinimalCheck, Folder, Calendar, ClipboardPlus, DoorOpen, MessageCircleWarning, Laptop, ShieldPlus,ShieldBan,UserRound } from 'lucide-react';
+import {CalendarPlus2, UserRoundSearch, LaptopMinimalCheck, Folder, Calendar, ClipboardPlus, DoorOpen, MessageCircleWarning, Laptop, ShieldPlus,ShieldBan,UserRound, Settings, ChevronDown } from 'lucide-react';
 import AppLogo from './app-logo';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 // ===== SECCIÓN PRINCIPAL =====
 const principalItems: NavItem[] = [
     {
@@ -20,7 +21,7 @@ const principalItems: NavItem[] = [
 const gestionRecursosItems: NavItem[] = [
     {
         title: 'Salas',
-        href: '/admin/salas',
+        href: '/salas',
         icon: DoorOpen,
         // permission: 'salas.view'
     },
@@ -32,12 +33,12 @@ const gestionRecursosItems: NavItem[] = [
     },
     {
         title: 'Jefes de Área',
-        href: '/admin/responsables',
+        href: '/responsables',
         icon: UserRound,
     },
      {
         title: 'Capacitadores',
-        href: '/admin/capacitadores',
+        href: '/capacitadores',
         icon: UserRoundSearch,
     },
 ];
@@ -103,28 +104,6 @@ const administracionItems: NavItem[] = [
 ];
 
 // Grupos de navegación organizados por secciones
-const navGroups = [
-    {
-        title: 'Principal',
-        items: principalItems
-    },
-    {
-        title: 'Gestión de Recursos',
-        items: gestionRecursosItems
-    },
-    {
-        title: 'Reservas y Uso',
-        items: reservasUsoItems
-    },
-    {
-        title: 'Reportes',
-        items: reportesItems
-    },
-    {
-        title: 'Administración',
-        items: administracionItems
-    },
-];
 const footerNavItems: NavItem[] = [
     {
         title: 'Contacto Soporte',
@@ -150,17 +129,150 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                {navGroups.map((group, index) => (
-                    <div key={group.title} className="mb-4">
-                        {index > 0 && <div className="mx-3 mb-3"><hr className="border-sidebar-border" /></div>}
-                        <div className="px-3 mb-2">
-                            <h4 className="text-xs font-semibold text-sidebar-foreground/70 uppercase tracking-wider">
-                                {group.title}
-                            </h4>
-                        </div>
-                        <NavMain items={group.items} />
-                    </div>
-                ))}
+               <NavMain items={principalItems} />
+
+                    <Collapsible defaultOpen className="group/collapsible">
+                    <SidebarGroup>
+                        <SidebarGroupLabel asChild>
+                            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                                <div className="flex items-center gap-2">
+                                    <Settings className="h-4 w-4" />
+                                    Gestion de Recursos
+                                </div>
+                                <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                            </CollapsibleTrigger>
+                        </SidebarGroupLabel>
+                        <CollapsibleContent>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {gestionRecursosItems.map((item) => (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton asChild>
+                                                <Link href={item.href} className="flex items-center gap-2 px-2 py-1.5">
+                                                    {item.icon && <item.icon className="h-4 w-4" />}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </CollapsibleContent>
+                    </SidebarGroup>
+                </Collapsible>
+
+                <Collapsible defaultOpen className="group/collapsible">
+                    <SidebarGroup>
+                        <SidebarGroupLabel asChild>
+                            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                                <div className="flex items-center gap-2">
+                                    <Settings className="h-4 w-4" />
+                                    Reportes
+                                </div>
+                                <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                            </CollapsibleTrigger>
+                        </SidebarGroupLabel>
+                        <CollapsibleContent>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {reportesItems.map((item) => (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton asChild>
+                                                <Link href={item.href} className="flex items-center gap-2 px-2 py-1.5">
+                                                    {item.icon && <item.icon className="h-4 w-4" />}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </CollapsibleContent>
+                    </SidebarGroup>
+                </Collapsible>
+                {/* Gestión Académica */}
+                <Collapsible defaultOpen className="group/collapsible">
+                    <SidebarGroup>
+                        <SidebarGroupLabel asChild>
+                            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                                <div className="flex items-center gap-2">
+                                    <Settings className="h-4 w-4" />
+                                    Reservas Uso
+                                </div>
+                                <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                            </CollapsibleTrigger>
+                        </SidebarGroupLabel>
+                        <CollapsibleContent>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {reservasUsoItems.map((item) => (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton asChild>
+                                                <Link href={item.href} className="flex items-center gap-2 px-2 py-1.5">
+                                                    {item.icon && <item.icon className="h-4 w-4" />}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </CollapsibleContent>
+                    </SidebarGroup>
+                </Collapsible>
+
+                <Collapsible defaultOpen className="group/collapsible">
+                    <SidebarGroup>
+                        <SidebarGroupLabel asChild>
+                            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm font-medium hover:bg-accent hover:text-accent-foreground">
+                                <div className="flex items-center gap-2">
+                                    <Settings className="h-4 w-4" />
+                                    Administracion
+                                </div>
+                                <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                            </CollapsibleTrigger>
+                        </SidebarGroupLabel>
+                        <CollapsibleContent>
+                            <SidebarGroupContent>
+                                <SidebarMenu>
+                                    {administracionItems.map((item) => (
+                                        <SidebarMenuItem key={item.title}>
+                                            <SidebarMenuButton asChild>
+                                                <Link href={item.href} className="flex items-center gap-2 px-2 py-1.5">
+                                                    {item.icon && <item.icon className="h-4 w-4" />}
+                                                    <span>{item.title}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </SidebarMenu>
+                            </SidebarGroupContent>
+                        </CollapsibleContent>
+                    </SidebarGroup>
+                </Collapsible>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </SidebarContent>
 
             <SidebarFooter>

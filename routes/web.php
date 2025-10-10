@@ -30,27 +30,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/salas/{sala}/reservas', [ReservaController::class, 'porSala'])->name('reservas.porSala');
 //Responsables
- Route::get('/admin/responsables', [ResponsableController::class, 'index'])->name('responsables.index');
-    Route::post('admin/responsables', [ResponsableController::class, 'store'])->name('responsables.store');
-    Route::put('/admin/responsables/{responsable}', [ResponsableController::class, 'update'])->name('responsables.update');
-    Route::delete('/admin/responsables/{responsable}', [ResponsableController::class, 'destroy'])->name('responsables.destroy');
+Route::resource('responsables', ResponsableController::class);
 // RUTAS DE SALAS
-   Route::get('/admin/salas', [SalaController::class, 'index'])->name('salas.index');
-    Route::post('admin/salas', [SalaController::class, 'store'])->name('salas.store');
-    Route::put('/admin/salas/{sala}', [SalaController::class, 'update'])->name('salas.update');
-    Route::delete('/admin/salas/{sala}', [SalaController::class, 'destroy'])->name('salas.destroy');
+   Route::resource('salas', SalaController::class);
 // RUTAS DE RESERVAS
- Route::get('/reservas', [ReservaController::class, 'index'])->name('reservas.index');
-   Route::post('/reservas', [ReservaController::class, 'store'])->name('reservas.store');
-   Route::put('/reservas/{reserva}', [ReservaController::class, 'update'])->name('reservas.update');
-   Route::delete('/reservas/{reserva}', [ReservaController::class, 'destroy'])->name('reservas.destroy');
+ Route::resource('reservas', ReservaController::class);
 // Rutas de administración de reservas
     Route::get('/admin/reservas', [ReservaAdminController::class, 'index'])->name('reservas.admin.index');
 //RUTAS DE EQUIPOS
- Route::get('/equipos', [EquipoController::class, 'index'])->name('equipos.index');
-    Route::post('/equipos', [EquipoController::class, 'store'])->name('equipos.store');
-    Route::put('/equipos/{equipo}', [EquipoController::class, 'update'])->name('equipos.update');
-    Route::delete('/equipos/{equipo}', [EquipoController::class, 'destroy'])->name('equipos.destroy');
+Route::resource('equipos', EquipoController::class);
+//RUTAS DE CAPACITADORES
+Route::resource('capacitadores', CapacitadorController::class)->parameters([
+    'capacitadores' => 'capacitador'
+]);
 //RUTAS DE CONTROL USO
  Route::get('/control-uso', [ControlUsoController::class, 'index'])->name('control-uso.index');
     Route::post('/control-uso', [ControlUsoController::class, 'store'])->name('control-uso.store');
@@ -60,11 +52,7 @@ Route::middleware(['auth'])->group(function () {
  Route::get('/admin/reportes-uso', [ReporteController::class, 'usoSalas'])->name('reporte.usoSalas');
     Route::get('/admin/reportes-equipos', [ReporteEquipoController::class, 'usoEquipos'])->name('reporte.usoEquipos');
     Route::get('/admin/historial-equipos', [HistorialEquipoController::class, 'index'])->name('historial.equipos');
-//RUTAS DE CAPACITADORES
- Route::get('/admin/capacitadores', [CapacitadorController::class, 'index'])->name('capacitadores.index');
-    Route::post('/admin/capacitadores', [CapacitadorController::class, 'store'])->name('capacitadores.store');
-    Route::put('/admin/capacitadores/{capacitador}', [CapacitadorController::class, 'update'])->name('capacitadores.update');
-    Route::delete('/admin/capacitadores/{capacitador}', [CapacitadorController::class, 'destroy'])->name('capacitadores.destroy');
+
     
 });
 Route::middleware(['auth','verified','role:admin'])->group(function () {

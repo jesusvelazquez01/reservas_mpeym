@@ -185,7 +185,8 @@ class ReservaController extends Controller
             ->exists();
 
         if ($conflicto) {
-            return back()->withErrors(['conflicto' => 'Ya existe una reserva en ese horario.']);
+            return back()
+            ->with('error', 'Ya existe una reserva en ese horario.');
         }
 
         $reserva->update($request->all());
@@ -264,19 +265,4 @@ class ReservaController extends Controller
 
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nombre',150);
             $table->string('apellido',150);
-            $table->string('dni',9);
-            $table->string('telefono')->nullable();
-            $table->string('correo')->nullable();
+            $table->string('dni',15)->nullable()->unique();
+            $table->string('telefono',150)->nullable();
+            $table->string('correo',150)->nullable()->unique();
             $table->string('area');
             $table->timestamps();
         });
