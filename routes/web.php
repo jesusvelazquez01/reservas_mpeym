@@ -13,11 +13,19 @@ use App\Http\Controllers\ResponsableController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ReporteEquipoController;
 use App\Http\Controllers\HistorialEquipoController;
 use App\Http\Controllers\CapacitadorController;
 
+// routes/web.php
+Route::get('/debug', function () {
+    return [
+        'is_secure' => request()->isSecure(),
+        'url' => url('/'),
+        'scheme' => request()->getScheme(),
+        'app_url' => config('app.url'),
+    ];
+});
 
 Route::get('/', function () {
     return Inertia::render('welcome');

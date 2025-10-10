@@ -4,7 +4,7 @@ set -e
 # Esperar un poco a que la DB esté lista (opcional)
 # sleep 5
 
-echo "🔧 Ejecutando migraciones y caches de Laravel..."
+echo "🔧 Ejecutando migraciones y seeders de Laravel..."
 php artisan migrate --force || true
 php artisan db:seed --force || true
 php artisan config:cache
