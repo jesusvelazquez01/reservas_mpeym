@@ -1,420 +1,407 @@
-import * as React from "react"
+import * as React from "react";
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { PageProps, type BreadcrumbItem, type Responsable } from '@/types';
-import { router } from '@inertiajs/react';
-import { Loader2, CheckCircle, XCircle, AlertTriangle, Clock, Check, ChevronsUpDown } from 'lucide-react';
-import { useState } from "react";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { area } from "@/constants/estados";
 import { cn } from "@/lib/utils";
-import {area} from '@/constants/estados';
-// Tipos para validación
+import {
+  Loader2, Check, ChevronsUpDown, CheckCircle, XCircle, AlertTriangle, Clock, UserCog,
+} from 'lucide-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList
+} from "@/components/ui/command";
+import { type BreadcrumbItem, type Responsable, type PageProps } from "@/types";
 
-// Tipos para validación
+// Tipos
 interface ValidationResult {
-    isValid: boolean;
-    message: string;
-    type: 'success' | 'error' | 'warning' | 'info';
+  isValid: boolean;
+  message: string;
+  type: "success" | "error" | "warning" | "info";
 }
 
 interface ValidationState {
-    [key: string]: ValidationResult | null;
+  [key: string]: ValidationResult | null;
 }
 
 interface EditProps extends PageProps {
-    responsable: Responsable;
+  responsable: Responsable;
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Responsables',
-        href: '/responsables',
-    },
-    {
-        title: 'Editar Responsable',
-        href: '',
-    },
+  { title: "Responsables", href: "/responsables" },
+  { title: "Editar Responsable", href: "" },
 ];
 
 export default function Edit() {
-    const {responsable } = usePage<EditProps>().props;
-     const [areaOpen, setAreaOpen] = React.useState(false);
-    const { data, setData, put, processing, errors } = useForm({
-        nombre: responsable.nombre || '',
-        apellido: responsable.apellido || '',
-        dni: responsable.dni || '',
-        telefono: responsable.telefono || '', 
-        correo: responsable.correo || '',
-        area: responsable.area || '',
-    });
+  const { responsable } = usePage<EditProps>().props;
+  const { data, setData, put, processing, errors } = useForm({
+    nombre: responsable.nombre || "",
+    apellido: responsable.apellido || "",
+    dni: responsable.dni || "",
+    telefono: responsable.telefono || "",
+    correo: responsable.correo || "",
+    area: responsable.area || "",
+  });
 
-    // Estado para validaciones en tiempo real
-    const [validationState, setValidationState] = React.useState<ValidationState>({});
+  const [areaOpen, setAreaOpen] = React.useState(false);
+  const [validationState, setValidationState] = React.useState<ValidationState>({});
+  const [showCancelDialog, setShowCancelDialog] = React.useState(false);
 
-    // Funciones de formateo
-    const formatDni = React.useCallback((value: string): string => {
-        const numbers = value.replace(/\D/g, '');
-        const limited = numbers.substring(0, 8);
-        
-        if (limited.length <= 3) {
-            return limited;
-        } else if (limited.length <= 6) {
-            return `${limited.substring(0, 3)}.${limited.substring(3)}`;
-        } else {
-            return `${limited.substring(0, 3)}.${limited.substring(3, 6)}.${limited.substring(6)}`;
-        }
-    }, []);
+  // ==== Formateo y validaciones ====
+  const formatDni = (value: string) => {
+    const numbers = value.replace(/\D/g, "").substring(0, 8);
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 6) return `${numbers.slice(0, 3)}.${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}.${numbers.slice(3, 6)}.${numbers.slice(6)}`;
+  };
 
-    const formatPhone = React.useCallback((value: string): string => {
-        const numbers = value.replace(/\D/g, '');
-        const limited = numbers.substring(0, 10);
-        
-        if (limited.length <= 3) {
-            return limited;
-        } else if (limited.length <= 6) {
-            return `${limited.substring(0, 3)}-${limited.substring(3)}`;
-        } else {
-            return `${limited.substring(0, 3)}-${limited.substring(3, 6)}-${limited.substring(6)}`;
-        }
-    }, []);
+  const formatPhone = (value: string) => {
+    const numbers = value.replace(/\D/g, "").substring(0, 10);
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 6) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 6)}-${numbers.slice(6)}`;
+  };
 
-    // Validaciones
-    const validateDni = React.useCallback((dni: string): ValidationResult => {
-        const cleanDni = dni.replace(/\D/g, '');
-        
-        if (cleanDni.length === 0) {
-            return { isValid: false, message: '', type: 'info' };
-        }
-        
-        if (cleanDni.length < 7) {
-            return {
-                isValid: false,
-                message: 'DNI debe tener entre 7 y 8 dígitos',
-                type: 'warning'
-            };
-        }
-        
-        if (cleanDni.length >= 7 && cleanDni.length <= 8) {
-            return {
-                isValid: true,
-                message: 'DNI válido',
-                type: 'success'
-            };
-        }
-        
-        return { isValid: false, message: 'DNI inválido', type: 'error' };
-    }, []);
+  const validateDni = (dni: string): ValidationResult => {
+    const clean = dni.replace(/\D/g, "");
+    if (!clean) return { isValid: false, message: "", type: "info" };
+    if (clean.length < 7)
+      return { isValid: false, message: "DNI debe tener entre 7 y 8 dígitos", type: "warning" };
+    if (clean.length <= 8) return { isValid: true, message: "DNI válido", type: "success" };
+    return { isValid: false, message: "DNI inválido", type: "error" };
+  };
 
-    const validateEmail = React.useCallback((email: string): ValidationResult => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
-        if (email.length === 0) {
-            return { isValid: false, message: '', type: 'info' };
-        }
-        
-        const isValid = emailRegex.test(email);
-        return {
-            isValid,
-            message: isValid ? 'Email válido' : 'Formato de email inválido',
-            type: isValid ? 'success' : 'error'
-        };
-    }, []);
-
-    // Manejadores de campos con formateo
-    const handleDniChange = React.useCallback((value: string) => {
-        const formatted = formatDni(value);
-        const validation = validateDni(formatted);
-        
-        setData('dni', formatted);
-        setValidationState(prev => ({ ...prev, dni: validation }));
-    }, [formatDni, validateDni, setData]);
-
-    const handlePhoneChange = React.useCallback((value: string) => {
-        const formatted = formatPhone(value);
-        setData('telefono', formatted);
-    }, [formatPhone, setData]);
-
-    const handleEmailChange = React.useCallback((value: string) => {
-        const validation = validateEmail(value);
-        setData('correo', value);
-        setValidationState(prev => ({ ...prev, correo: validation }));
-    }, [validateEmail, setData]);
-
-    // Función para obtener el ícono de validación
-    const getValidationIcon = (validation: ValidationResult | null) => {
-        if (!validation || !validation.message) return null;
-        
-        const iconClass = "h-4 w-4";
-        
-        switch (validation.type) {
-            case 'success':
-                return <CheckCircle className={`${iconClass} text-green-500`} />;
-            case 'error':
-                return <XCircle className={`${iconClass} text-red-500`} />;
-            case 'warning':
-                return <AlertTriangle className={`${iconClass} text-yellow-500`} />;
-            case 'info':
-                return <Clock className={`${iconClass} text-blue-500`} />;
-            default:
-                return null;
-        }
+  const validateEmail = (email: string): ValidationResult => {
+    if (!email) return { isValid: false, message: "", type: "info" };
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return {
+      isValid,
+      message: isValid ? "Email válido" : "Formato inválido",
+      type: isValid ? "success" : "error",
     };
+  };
 
-    // Función para obtener clases CSS del input
-    const getInputClassName = (validation: ValidationResult | null) => {
-        if (!validation || !validation.message) return '';
-        
-        switch (validation.type) {
-            case 'success':
-                return 'border-green-500 focus:border-green-500';
-            case 'error':
-                return 'border-red-500 focus:border-red-500';
-            case 'warning':
-                return 'border-yellow-500 focus:border-yellow-500';
-            default:
-                return '';
-        }
-    };
+  // ==== Handlers ====
+  const handleDniChange = (value: string) => {
+    const formatted = formatDni(value);
+    setData("dni", formatted);
+    setValidationState((p) => ({ ...p, dni: validateDni(formatted) }));
+  };
 
-    // Función para obtener el color del mensaje
-    const getMessageClassName = (validation: ValidationResult | null) => {
-        if (!validation || !validation.message) return '';
-        
-        switch (validation.type) {
-            case 'success':
-                return 'text-green-600';
-            case 'error':
-                return 'text-red-600';
-            case 'warning':
-                return 'text-yellow-600';
-            case 'info':
-                return 'text-blue-600';
-            default:
-                return '';
-        }
-    };
+  const handlePhoneChange = (value: string) => setData("telefono", formatPhone(value));
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+  const handleEmailChange = (value: string) => {
+    setData("correo", value);
+    setValidationState((p) => ({ ...p, correo: validateEmail(value) }));
+  };
 
-        put(route('responsables.update', responsable.id));
-    };
-     const [showCancelDialog, setShowCancelDialog] = useState(false);
-    const handleCancel = () => {
-        if (JSON.stringify(data) !== JSON.stringify({
-            nombre: responsable.nombre,
-            apellido: responsable.apellido,
-            dni: responsable.dni,
-            telefono: responsable.telefono,
-            correo: responsable.correo,
-            area: responsable.area
-        })) {
-              setShowCancelDialog(true);
-        }else{
-            router.visit(route('responsables.index'));
-        }
-        
-    };
- const confirmCancel = () => {
-            router.visit(route('responsables.index'));
-        };
-    return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Editar Responsable" />
-            <div className="flex flex-col gap-4 p-4">
-                <h1 className="text-2xl font-bold">Editar Responsable</h1>
-                <Card>
-                    <form onSubmit={handleSubmit}>
-                        <CardHeader>Información del Responsable</CardHeader>
-                        <CardContent className="flex flex-col gap-4">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* Nombre */}
-                                <div className="flex flex-col gap-1">
-                                    <Label>Nombre</Label>
-                                    <Input
-                                        value={data.nombre}
-                                        onChange={(e) => setData('nombre', e.target.value)}
-                                        placeholder="Nombre del Responsable"
-                                        autoFocus
-                                    />
-                                    {errors.nombre && <p className="text-sm text-red-500">{errors.nombre}</p>}
-                                </div>
+  const getValidationIcon = (v: ValidationResult | null) => {
+    if (!v?.message) return null;
+    const cls = "h-4 w-4";
+    switch (v.type) {
+      case "success":
+        return <CheckCircle className={`${cls} text-green-500`} />;
+      case "error":
+        return <XCircle className={`${cls} text-red-500`} />;
+      case "warning":
+        return <AlertTriangle className={`${cls} text-yellow-500`} />;
+      case "info":
+        return <Clock className={`${cls} text-blue-500`} />;
+      default:
+        return null;
+    }
+  };
 
-                                {/* Apellido */}
-                                <div className="flex flex-col gap-1">
-                                    <Label>Apellido</Label>
-                                    <Input
-                                        value={data.apellido}
-                                        onChange={(e) => setData('apellido', e.target.value)}
-                                        placeholder="Apellido del Responsable"
-                                    />
-                                    {errors.apellido && <p className="text-sm text-red-500">{errors.apellido}</p>}
-                                </div>
-                            </div>
+  const getInputClass = (v: ValidationResult | null) => {
+    if (!v?.message) return "";
+    switch (v.type) {
+      case "success":
+        return "border-green-500 focus:border-green-500";
+      case "error":
+        return "border-red-500 focus:border-red-500";
+      case "warning":
+        return "border-yellow-500 focus:border-yellow-500";
+      default:
+        return "";
+    }
+  };
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* DNI con formateo automático */}
-                                <div className="flex flex-col gap-1">
-                                    <Label>D.N.I</Label>
-                                    <div className="relative">
-                                        <Input
-                                            value={data.dni}
-                                            onChange={(e) => handleDniChange(e.target.value)}
-                                            placeholder="Ejemplo: 43.698.145"
-                                            maxLength={10}
-                                            className={`pr-10 ${getInputClassName(validationState.dni)}`}
-                                        />
-                                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                            {getValidationIcon(validationState.dni)}
-                                        </div>
-                                    </div>
-                                    {validationState.dni?.message && (
-                                        <div className="flex items-center gap-2 text-sm">
-                                            {getValidationIcon(validationState.dni)}
-                                            <span className={getMessageClassName(validationState.dni)}>
-                                                {validationState.dni.message}
-                                            </span>
-                                        </div>
-                                    )}
-                                    {errors.dni && <p className="text-sm text-red-500">{errors.dni}</p>}
-                                </div>
+  const getMessageClass = (v: ValidationResult | null) => {
+    if (!v?.message) return "";
+    switch (v.type) {
+      case "success":
+        return "text-green-600";
+      case "error":
+        return "text-red-600";
+      case "warning":
+        return "text-yellow-600";
+      case "info":
+        return "text-blue-600";
+      default:
+        return "";
+    }
+  };
 
-                                {/* Teléfono con formateo */}
-                                <div className="flex flex-col gap-1">
-                                    <Label>Teléfono</Label>
-                                    <Input
-                                        value={data.telefono}
-                                        onChange={(e) => handlePhoneChange(e.target.value)}
-                                        placeholder="Ejemplo: 388-123-4567"
-                                        maxLength={12}
-                                    />
-                                    {errors.telefono && <p className="text-sm text-red-500">{errors.telefono}</p>}
-                                    <p className="text-xs text-muted-foreground">Formato: XXX-XXX-XXXX</p>
-                                </div>
-                            </div>
+  // ==== Envío y cancelación ====
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    put(route("responsables.update", responsable.id));
+  };
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {/* Email con validación */}
-                                <div className="flex flex-col gap-1">
-                                    <Label>Correo</Label>
-                                    <div className="relative">
-                                        <Input
-                                            type="email"
-                                            value={data.correo}
-                                            onChange={(e) => handleEmailChange(e.target.value)}
-                                            className={`pr-10 ${getInputClassName(validationState.correo)}`}
-                                            placeholder="correo@ejemplo.com"
-                                        />
-                                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                            {getValidationIcon(validationState.correo)}
-                                        </div>
-                                    </div>
-                                    {validationState.correo?.message && (
-                                        <div className="flex items-center gap-2 text-sm">
-                                            {getValidationIcon(validationState.correo)}
-                                            <span className={getMessageClassName(validationState.correo)}>
-                                                {validationState.correo.message}
-                                            </span>
-                                        </div>
-                                    )}
-                                    {errors.correo && <p className="text-sm text-red-500">{errors.correo}</p>}
-                                </div>
+  const handleCancel = () => {
+    if (JSON.stringify(data) !== JSON.stringify(responsable)) {
+      setShowCancelDialog(true);
+    } else {
+      router.visit(route("responsables.index"));
+    }
+  };
 
-                              {/* Área */}
-                                <div className="flex flex-col gap-1">
-                                <Label htmlFor="status">Area</Label>
-                                <Popover open={areaOpen} onOpenChange={setAreaOpen}>
-                                    <PopoverTrigger asChild>
-                                        <Button
-                                            variant="outline"
-                                            role="combobox"
-                                            aria-expanded={areaOpen}
-                                            className="w-full justify-between"
-                                            disabled={processing}
-                                        >
-                                              {data.area ? area.find(are => are.value === data.area)?.label : 'Seleccioná estado...'}
-                                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-full p-0">
-                                        <Command>
-                                            <CommandInput placeholder="Busca un aréa..." />
-                                            <CommandList>
-                                                <CommandEmpty>No hay areas encontradas.</CommandEmpty>
-                                                <CommandGroup>
-                                                    {area.map((areas) => (
-                                                        <CommandItem
-                                                            key={areas.value}
-                                                            value={areas.value}
-                                                           onSelect={(currentValue) => { setData('area', currentValue === data.area ? '' : currentValue); setAreaOpen(false);}}>
-                                                            <Check
-                                                                className={cn(
-                                                                    'mr-2 h-4 w-4',
-                                                                    data.area === areas.value
-                                                                        ? 'opacity-100'
-                                                                        : 'opacity-0'
-                                                                )}
-                                                            />
-                                                            {areas.label}
-                                                        </CommandItem>
-                                                    ))}
-                                                </CommandGroup>
-                                            </CommandList>
-                                        </Command>
-                                    </PopoverContent>
-                                </Popover>
-                                {errors.area && <p className="text-sm text-red-500">{errors.area}</p>}
-                                </div>
-                            </div>
-                        </CardContent>
+  const confirmCancel = () => router.visit(route("responsables.index"));
 
-                        <CardFooter className="flex justify-end gap-2">
-                            <Button
-                                type="button"
-                                variant="outline"
-                                onClick={handleCancel}
-                            >
-                                Cancelar
-                            </Button>
-                            <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-                                                            <AlertDialogContent>
-                                                                <AlertDialogHeader>
-                                                                    <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
-                                                                    <AlertDialogDescription>
-                                                                        Tienes datos sin guardar. ¿Estás seguro que deseas salir sin guardar los cambios?
-                                                                    </AlertDialogDescription>
-                                                                </AlertDialogHeader>
-                                                                <AlertDialogFooter>
-                                                                    <AlertDialogCancel>Continuar cargando</AlertDialogCancel>
-                                                                    <AlertDialogAction onClick={confirmCancel}>
-                                                                        Descartar cambios
-                                                                    </AlertDialogAction>
-                                                                </AlertDialogFooter>
-                                                            </AlertDialogContent>
-                            </AlertDialog>
-                            <Button
-                                type="submit"
-                                disabled={processing}
-                            >
-                                {processing ? (
-                                    <div className="flex items-center gap-2">
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        Actualizando...
-                                    </div>
-                                ) : (
-                                    'Actualizar'
-                                )}
-                            </Button>
-                        </CardFooter>
-                    </form>
-                </Card>
-            </div>
-        </AppLayout>
-    );
+  return (
+    <AppLayout breadcrumbs={breadcrumbs}>
+      <Head title="Editar Responsable" />
+      <div className="min-h-screen bg-gradient-to-br p-3">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Encabezado */}
+          <div className="text-align-left">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+              <UserCog className="h-6 w-6 text-orange-400" />
+              Editar Responsable
+            </h1>
+            <p className="text-slate-600 dark:text-slate-400">
+              Modifica los datos del responsable en el sistema.
+            </p>
+          </div>
+
+          {/* Card principal */}
+          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-orange-400">
+                <CheckCircle className="h-5 w-5 text-orange-400" />
+                Información del Responsable
+              </CardTitle>
+              <CardDescription>
+                Completa todos los campos obligatorios para actualizar el responsable.
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="space-y-6 pt-6">
+              {/* Nombre y Apellido */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Nombre</Label>
+                  <Input
+                    value={data.nombre}
+                    onChange={(e) => setData("nombre", e.target.value)}
+                    placeholder="Nombre del Responsable"
+                    disabled={processing}
+                  />
+                  {errors.nombre && <p className="text-sm text-red-500">{errors.nombre}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Apellido</Label>
+                  <Input
+                    value={data.apellido}
+                    onChange={(e) => setData("apellido", e.target.value)}
+                    placeholder="Apellido del Responsable"
+                    disabled={processing}
+                  />
+                  {errors.apellido && <p className="text-sm text-red-500">{errors.apellido}</p>}
+                </div>
+              </div>
+
+              {/* DNI y Teléfono */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>D.N.I</Label>
+                  <div className="relative">
+                    <Input
+                      value={data.dni}
+                      onChange={(e) => handleDniChange(e.target.value)}
+                      placeholder="43.698.145"
+                      maxLength={10}
+                      className={`pr-10 ${getInputClass(validationState.dni)}`}
+                      disabled={processing}
+                    />
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      {getValidationIcon(validationState.dni)}
+                    </div>
+                  </div>
+                  {validationState.dni?.message && (
+                    <p
+                      className={`flex items-center gap-1 text-sm ${getMessageClass(
+                        validationState.dni
+                      )}`}
+                    >
+                      {getValidationIcon(validationState.dni)} {validationState.dni.message}
+                    </p>
+                  )}
+                  {errors.dni && <p className="text-sm text-red-500">{errors.dni}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Teléfono</Label>
+                  <Input
+                    value={data.telefono}
+                    onChange={(e) => handlePhoneChange(e.target.value)}
+                    placeholder="388-547-4266"
+                    disabled={processing}
+                  />
+                  <p className="text-xs text-muted-foreground">Formato: XXX-XXX-XXXX</p>
+                  {errors.telefono && <p className="text-sm text-red-500">{errors.telefono}</p>}
+                </div>
+              </div>
+
+              {/* Correo y Área */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Correo</Label>
+                  <div className="relative">
+                    <Input
+                      type="email"
+                      value={data.correo}
+                      onChange={(e) => handleEmailChange(e.target.value)}
+                      placeholder="correo@ejemplo.com"
+                      className={`pr-10 ${getInputClass(validationState.correo)}`}
+                      disabled={processing}
+                    />
+                    <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      {getValidationIcon(validationState.correo)}
+                    </div>
+                  </div>
+                  {validationState.correo?.message && (
+                    <p
+                      className={`flex items-center gap-1 text-sm ${getMessageClass(
+                        validationState.correo
+                      )}`}
+                    >
+                      {getValidationIcon(validationState.correo)} {validationState.correo.message}
+                    </p>
+                  )}
+                  {errors.correo && <p className="text-sm text-red-500">{errors.correo}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Área</Label>
+                  <Popover open={areaOpen} onOpenChange={setAreaOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        aria-expanded={areaOpen}
+                        className="w-full justify-between"
+                      >
+                        {data.area
+                          ? area.find((a) => a.value === data.area)?.label
+                          : "Selecciona un área..."}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-full p-0">
+                      <Command>
+                        <CommandInput placeholder="Busca un área..." />
+                        <CommandList>
+                          <CommandEmpty>No hay áreas encontradas.</CommandEmpty>
+                          <CommandGroup>
+                            {area.map((a) => (
+                              <CommandItem
+                                key={a.value}
+                                value={a.value}
+                                onSelect={(v) => {
+                                  setData("area", v);
+                                  setAreaOpen(false);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    data.area === a.value ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                {a.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  {errors.area && <p className="text-sm text-red-500">{errors.area}</p>}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Botones de acción */}
+          <Card className="shadow-lg border-2 mt-4">
+            <CardContent className="p-6 flex flex-wrap gap-3 justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancel}
+                className="gap-2 bg-white"
+              >
+                Cancelar
+              </Button>
+
+              <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>¿Descartar cambios?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Tienes datos sin guardar. ¿Deseas salir sin guardar los cambios?
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Seguir editando</AlertDialogCancel>
+                    <AlertDialogAction onClick={confirmCancel}>
+                      Descartar
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <Button
+                type="submit"
+                disabled={processing}
+                className="gap-2"
+                onClick={handleSubmit}
+              >
+                {processing ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Guardando...
+                  </div>
+                ) : (
+                  "Actualizar"
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </AppLayout>
+  );
 }
+
+

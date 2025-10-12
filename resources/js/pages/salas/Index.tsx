@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, usePage, router, Link } from '@inertiajs/react';
 import { useState } from 'react';
-import { Pencil, Plus, Trash2, Building2 } from 'lucide-react';
+import { Pencil, Plus, Trash2, Building2, Edit } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { SimpleDataTable } from '@/components/ui/simple-data-table';
@@ -41,7 +41,7 @@ export default function Index() {
           <div className="flex gap-2">
             <Link href={route('salas.edit', sala.id)}>
               <Button size="sm" variant="default">
-                <Pencil className="h-4 w-4" />
+                <Edit className="h-4 w-4" />
               </Button>
             </Link>
             <Button

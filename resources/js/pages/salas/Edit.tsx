@@ -1,6 +1,6 @@
 import * as React from "react"
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
@@ -76,7 +76,7 @@ export default function Edit() {
             </CardDescription>
           </CardHeader>
 
-          <form onSubmit={handleSubmit}>
+          
             <CardContent className="space-y-6 pt-6">
               {/* Nombre */}
               <div className="space-y-2">
@@ -132,10 +132,12 @@ export default function Edit() {
                 )}
               </div>
             </CardContent>
-
-            {/* Footer de acciones */}
-            <CardFooter className="p-6 flex justify-end gap-3">
-              <Button
+        </Card>
+        
+       <Card className="shadow-lg border-2">
+        <CardContent className="p-6">
+          <div className="flex flex-wrap gap-3 justify-end"> 
+                <Button
                 type="button"
                 variant="outline"
                 onClick={handleCancel}
@@ -163,6 +165,7 @@ export default function Edit() {
 
               <Button
                 type="submit"
+                onClick={handleSubmit}
                 disabled={processing}
                 className="gap-2 "
               >
@@ -175,9 +178,11 @@ export default function Edit() {
                   'Guardar'
                 )}
               </Button>
-            </CardFooter>
-          </form>
-        </Card>
+          </div>
+                
+        </CardContent>
+              
+      </Card>         
       </div>
     </div>
   </AppLayout>

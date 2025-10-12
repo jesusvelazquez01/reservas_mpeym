@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ResponsablesDataTable } from '@/components/ui/responsables-data-table';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { PageProps, type BreadcrumbItem, type Responsable } from '@/types';
-import { toast } from 'react-toastify';
+
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -23,8 +23,7 @@ export default function Index() {
   const handleDelete = (responsable: Responsable) => {
     router.delete(route('responsables.destroy', responsable.id), {
       preserveScroll: true,
-      onSuccess: () => toast.success('Responsable eliminado correctamente'),
-      onError: () => toast.error('Error al eliminar el Responsable'),
+      
     });
   };
 

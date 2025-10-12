@@ -1,139 +1,142 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, usePage,Link } from '@inertiajs/react';
-
-import {  Trash2, Plus, Pencil } from 'lucide-react';
+import { Head, usePage, Link, router, useForm } from '@inertiajs/react';
+import { Trash2, Plus,  Users, Edit } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
-import { CapacitadoresDataTable } from '@/components/ui/capacitadores-data-table';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { PageProps, type BreadcrumbItem,  type Capacitador } from '@/types';
-
-import { router } from '@inertiajs/react';
+import { PageProps, type BreadcrumbItem, type Capacitador } from '@/types';
+import { CapacitadoresDataTable } from '@/components/ui/capacitadores-data-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Gestión de Responsables',
-        href: '/responsables',
-    },
+  { title: 'Gestión de Capacitadores', href: '/capacitadores' },
 ];
 
 export default function Index() {
-    const { capacitadores } = usePage<PageProps>().props;
+  const { capacitadores } = usePage<PageProps>().props;
+  const { processing } = useForm();
 
-    const handleDelete = (capacitador: Capacitador) => {
-        router.delete(route('capacitadores.destroy', capacitador.id), {
-            onSuccess: () => {
-                // La página se recargará automáticamente con los datos actualizados
-            },
-            onError: (errors) => {
-                console.error('Error al eliminar:', errors);
-            }
-        });
-    };
+  const handleDelete = (capacitador: Capacitador) => {
+    router.delete(route('capacitadores.destroy', capacitador.id), {
+      onError: (errors) => console.error('Error al eliminar:', errors),
+    });
+  };
 
+  const handleEdit = (capacitador: Capacitador) => {
+    router.visit(route('capacitadores.edit', capacitador.id));
+  };
 
-    const columns: ColumnDef<Capacitador>[] = [
-        {
-            accessorKey: 'nombre',
-            header: 'Nombre',
-        },
-        {
-            accessorKey: 'apellido',
-            header: 'Apellido',
-        },
-        {
-            accessorKey: 'dni',
-            header: 'D.N.I',
-        },
-        {
-            accessorKey: 'telefono',
-            header: 'Teléfono',
-        },
-        {
-            accessorKey: 'correo',
-            header: 'Correo',
-        },
-       
-        {
-            id: 'actions',
-            header: 'Acciones',
-            cell: ({ row }) => {
-                const capacitador = row.original;
-                return (
-                    <div className="flex gap-2">
-                        <Link href={route('capacitadores.edit', capacitador .id)}>
-                            <Button size="sm" variant="default">
-                                <Pencil className='h-4 w-4'/>
-                            </Button>
-                        </Link>
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <Button 
-                                    variant="destructive" 
-                                    size="sm"
-                                    title="Eliminar responsable"
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogTitle>¿Desea eliminar al Responsable "{capacitador .nombre} {capacitador .apellido}"?</DialogTitle>
-                                <DialogDescription>
-                                    Esta acción no se puede deshacer. El responsable será eliminado permanentemente del sistema.
-                                </DialogDescription>
-                                <DialogFooter className="gap-2">
-                                    <DialogClose asChild>
-                                        <Button variant="secondary">
-                                            Cancelar
-                                        </Button>
-                                    </DialogClose>
-                                    <DialogClose asChild>
-                                        <Button 
-                                            variant="destructive" 
-                                            onClick={() => handleDelete(capacitador )}
-                                        >
-                                            Eliminar
-                                        </Button>
-                                    </DialogClose>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                    </div>
-                );
-            },
-        },
-    ];
+  const columns: ColumnDef<Capacitador>[] = [
+    { accessorKey: 'nombre', header: 'Nombre' },
+    { accessorKey: 'apellido', header: 'Apellido' },
+    { accessorKey: 'dni', header: 'D.N.I' },
+    { accessorKey: 'telefono', header: 'Teléfono' },
+    { accessorKey: 'correo', header: 'Correo' },
+    {
+      id: 'actions',
+      header: 'Acciones',
+      cell: ({ row }) => {
+        const capacitador = row.original;
+        return (
+          <div className="flex gap-2">
+            <Button onClick={() => handleEdit(capacitador)} size="sm" variant="default" title="Editar capacitador">
+              <Edit className="h-4 w-4" />
+            </Button>
 
-    return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Gestión de Capacitadores" />
-            <div className="p-3">
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl font-bold">Capacitadores</h1>
-                    <Link href={route('capacitadores.create')}>
-                        <Button>
-                            <Plus className='mr-2 h-4 w-4' /> Agregar Capacitador
-                        </Button>
-                    </Link>
-                   
-                </div>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive" size="sm" title="Eliminar capacitador">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
 
-                <CapacitadoresDataTable 
-                    columns={columns} 
-                    data={capacitadores.data}
-                    pagination={{
-                        from: capacitadores.data.length > 0 ? ((capacitadores.current_page - 1) * capacitadores.per_page) + 1 : 0,
-                        to: Math.min(capacitadores.current_page * capacitadores.per_page, capacitadores.total),
-                        total: capacitadores.total,
-                        links: capacitadores.links,
-                        OnPageChange: (url: string | null) => {
-                            if (url) router.get(url);
-                        },
-                    }}
-                />
-            </div>
+              <DialogContent>
+                <DialogTitle>
+                  ¿Desea eliminar al Capacitador "{capacitador.nombre} {capacitador.apellido}"?
+                </DialogTitle>
+                <DialogDescription>
+                  Esta acción no se puede deshacer. El capacitador será eliminado permanentemente del sistema.
+                </DialogDescription>
+                <DialogFooter className="gap-2">
+                  <DialogClose asChild>
+                    <Button variant="secondary">Cancelar</Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button
+                      variant="destructive"
+                      onClick={() => handleDelete(capacitador)}
+                      disabled={processing}
+                    >
+                      {processing ? 'Eliminando...' : 'Eliminar'}
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        );
+      },
+    },
+  ];
 
-           
-        </AppLayout>
-    );
+  return (
+    <AppLayout breadcrumbs={breadcrumbs}>
+      <Head title="Gestión de Capacitadores" />
+
+      <div className="min-h-screen bg-gradient-to-br p-3">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {/* Header */}
+          <div className="text-align-left">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+              <Users className="h-5 w-5 text-orange-400" />
+              Gestión de Capacitadores
+            </h1>
+            <p className="text-slate-600 dark:text-slate-400">
+              Administra la lista de capacitadores del sistema.
+            </p>
+          </div>
+
+          {/* Card principal */}
+          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+            <CardHeader className="bg-gradient-to-r">
+              <CardTitle className="flex items-center gap-2 text-orange-400">
+                <Users className="h-5 w-5 text-orange-400" />
+                Lista de Capacitadores
+              </CardTitle>
+              <CardDescription>
+                Aquí puedes visualizar, editar o eliminar los capacitadores registrados.
+              </CardDescription>
+            </CardHeader>
+
+            <CardContent className="space-y-4 pt-6">
+              {/* Botón Agregar */}
+              <div className="flex justify-end mb-4">
+                <Link href={route('capacitadores.create')}>
+                  <Button className="gap-2">
+                    <Plus className="h-4 w-4" />
+                    Agregar Capacitador
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Tabla */}
+              <CapacitadoresDataTable
+                columns={columns}
+                data={capacitadores.data}
+                pagination={{
+                  from: capacitadores.data.length > 0 ? ((capacitadores.current_page - 1) * capacitadores.per_page) + 1 : 0,
+                  to: Math.min(capacitadores.current_page * capacitadores.per_page, capacitadores.total),
+                  total: capacitadores.total,
+                  links: capacitadores.links,
+                  OnPageChange: (url: string | null) => {
+                    if (url) router.get(url);
+                  },
+                }}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </AppLayout>
+  );
 }

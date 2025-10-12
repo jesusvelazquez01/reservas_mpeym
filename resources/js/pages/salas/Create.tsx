@@ -129,11 +129,6 @@ export default function Create() {
                 )}
               </div>
             </CardContent>
-
-           
-            
-          
-          
         </Card>
            {/* Botones de Acción */}
             <Card className="shadow-lg border-2">
