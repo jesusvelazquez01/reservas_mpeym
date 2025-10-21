@@ -11,7 +11,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { es } from 'date-fns/locale';
-import { ChevronDownIcon, Loader2, Monitor, CheckCircle2 } from 'lucide-react';
+import { ChevronDownIcon, Loader2, Monitor, CheckCircle2, HelpCircle } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,6 +22,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle
 } from '@/components/ui/alert-dialog';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Equipos', href: '/equipos' },
@@ -90,13 +91,50 @@ export default function Edit({ equipo, salas }: EditProps) {
 
           {/* Header */}
           <div className="text-align-left">
-            <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
-              <Monitor className="h-5 w-5 text-orange-400" />
-              Editar Equipo
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400">
-              Modifica la información del equipo seleccionado
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
+                  <Monitor className="h-5 w-5 text-orange-400" />
+                  Editar Equipo
+                </h1>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Modifica la información del equipo seleccionado
+                </p>
+              </div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                      <HelpCircle className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>Módulo de Edición</DialogTitle>
+                    <DialogDescription className="space-y-2">
+                      <p>
+                        Este módulo te permite editar el equipo seleccionado del ministerio.
+                      </p>
+                      <p className="font-semibold">Edición correcta del equipo:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Marca:Asus</li>
+                        <li>Modelo: Vivobook 15</li>
+                        <li>Estado: Excelente</li>
+                        <li>Sistema Operativo: Windows 11</li>
+                        <li>Fecha de adquisición: 17/10/2025</li>
+                        <li>Fecha de baja 'opcional': 17/10/2030</li>
+                        <li>Sala: Sala de Capacitación</li>
+                      </ul>
+                      <p className="font-semibold">
+                           Una vez completada la edición, presiona el botón "Actualizar" para registrar los nuevos datos en el sistema.
+                      </p>
+                      <p>
+                        <span className="font-semibold">Nota:</span> Los campos marcados con <span className="text-red-500">*</span> son obligatorios.
+                      </p>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+            </div>
+            
+            
           </div>
 
           {/* Card principal */}
@@ -115,7 +153,7 @@ export default function Edit({ equipo, salas }: EditProps) {
               {/* Marca / Modelo */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Marca</Label>
+                  <Label>Marca <span className="text-red-500">*</span></Label>
                   <Input
                     placeholder="HP, Dell, Lenovo..."
                     value={data.marca}
@@ -126,7 +164,7 @@ export default function Edit({ equipo, salas }: EditProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Modelo</Label>
+                  <Label>Modelo <span className="text-red-500">*</span></Label>
                   <Input
                     placeholder="Pavilion 15, Inspiron..."
                     value={data.modelo}
@@ -140,7 +178,7 @@ export default function Edit({ equipo, salas }: EditProps) {
               {/* Estado / Sistema Operativo */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Estado Inicial</Label>
+                  <Label>Estado Inicial <span className="text-red-500">*</span></Label>
                   <Select
                     value={data.estado_inicial}
                     onValueChange={(value) => setData('estado_inicial', value)}
@@ -159,7 +197,7 @@ export default function Edit({ equipo, salas }: EditProps) {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Sistema Operativo</Label>
+                  <Label>Sistema Operativo <span className="text-red-500">*</span></Label>
                   <Input
                     placeholder="Windows 11, Ubuntu..."
                     value={data.sistema_operativo}
@@ -173,7 +211,7 @@ export default function Edit({ equipo, salas }: EditProps) {
               {/* Fechas */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Fecha de Adquisición</Label>
+                  <Label>Fecha de Adquisición <span className="text-red-500">*</span></Label>
                   <Popover open={openAdq} onOpenChange={setOpenAdq}>
                     <PopoverTrigger asChild>
                       <Button variant="outline" className="w-48 justify-between font-normal" type="button">
@@ -225,7 +263,7 @@ export default function Edit({ equipo, salas }: EditProps) {
 
               {/* Sala */}
               <div className="space-y-2">
-                <Label>Sala</Label>
+                <Label>Sala <span className="text-red-500">*</span></Label>
                 <Select value={data.sala_id} onValueChange={(value) => setData('sala_id', value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Seleccionar sala..." />

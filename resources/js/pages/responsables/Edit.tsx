@@ -10,6 +10,7 @@ import { area } from "@/constants/estados";
 import { cn } from "@/lib/utils";
 import {
   Loader2, Check, ChevronsUpDown, CheckCircle, XCircle, AlertTriangle, Clock, UserCog,
+  HelpCircle,
 } from 'lucide-react';
 import {
   AlertDialog,
@@ -30,6 +31,7 @@ import {
   CommandList
 } from "@/components/ui/command";
 import { type BreadcrumbItem, type Responsable, type PageProps } from "@/types";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 // Tipos
 interface ValidationResult {
@@ -183,15 +185,49 @@ export default function Edit() {
       <div className="min-h-screen bg-gradient-to-br p-3">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Encabezado */}
-          <div className="text-align-left">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
-              <UserCog className="h-6 w-6 text-orange-400" />
-              Editar Responsable
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400">
-              Modifica los datos del responsable en el sistema.
-            </p>
-          </div>
+            <div className="text-align-left">
+              <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+                      <UserCog className="h-6 w-6 text-orange-400" />
+                      Editar Responsable
+                    </h1>
+                    <p className="text-slate-600 dark:text-slate-400">
+                      Modifica los datos del responsable en el sistema.
+                    </p>
+                  </div>
+            <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                      <HelpCircle className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>Módulo de Edición</DialogTitle>
+                    <DialogDescription className="space-y-2">
+                      <p>
+                        Este módulo te permite editar al responsables del area del ministerio.
+                      </p>
+                      <p className="font-semibold">Carga correcta del capacitador:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Nombre: Isolda</li>
+                        <li>Apellido: Calsina</li>
+                        <li>DNI: 11.111.111</li>
+                        <li>Teléfono: 388-444-1111</li>
+                        <li>Correo: isolda@example.com</li>
+                        <li>Area: Ministra de Planificación Estrategica y Modernización</li>
+                      </ul>
+                      <p className="font-semibold">
+                        Una vez completada la carga, presiona el botón "Actualizar" para registrar el capacitador en el sistema.
+                      </p>
+                      <p>
+                        <span className="font-semibold">Nota:</span> Los campos marcados con <span className="text-red-500">*</span> son obligatorios.
+                      </p>
+                    </DialogDescription>
+                  </DialogContent>
+              </Dialog>
+              </div>
+            </div>
 
           {/* Card principal */}
           <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
@@ -209,7 +245,7 @@ export default function Edit() {
               {/* Nombre y Apellido */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Nombre</Label>
+                  <Label>Nombre <span className="text-red-500">*</span></Label>
                   <Input
                     value={data.nombre}
                     onChange={(e) => setData("nombre", e.target.value)}
@@ -220,7 +256,7 @@ export default function Edit() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Apellido</Label>
+                  <Label>Apellido <span className="text-red-500">*</span></Label>
                   <Input
                     value={data.apellido}
                     onChange={(e) => setData("apellido", e.target.value)}
@@ -303,7 +339,7 @@ export default function Edit() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Área</Label>
+                  <Label>Área <span className="text-red-500">*</span></Label>
                   <Popover open={areaOpen} onOpenChange={setAreaOpen}>
                     <PopoverTrigger asChild>
                       <Button

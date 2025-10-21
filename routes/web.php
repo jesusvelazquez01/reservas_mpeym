@@ -16,7 +16,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReporteEquipoController;
 use App\Http\Controllers\HistorialEquipoController;
 use App\Http\Controllers\CapacitadorController;
-
+use App\Http\Controllers\AreaController;
 // routes/web.php
 Route::get('/debug', function () {
     return [
@@ -55,6 +55,8 @@ Route::resource('capacitadores', CapacitadorController::class)->parameters([
 Route::resource('control-uso', ControlUsoController::class)->parameters([
     'control-uso' => 'controlUso'
 ]);
+//RUTAS DE AREAS
+Route::resource('areas', AreaController::class);
 //REPORTE DE USO DE SALAS Y EQUIPOS
  Route::get('/admin/reportes-uso', [ReporteController::class, 'usoSalas'])->name('reporte.usoSalas');
     Route::get('/admin/reportes-equipos', [ReporteEquipoController::class, 'usoEquipos'])->name('reporte.usoEquipos');

@@ -113,7 +113,7 @@ class UserController extends Controller
 
             return redirect()
                 ->route('users.index')
-                ->with('success', 'Record deleted successfully.');
+                ->with('success', 'Usuario eliminado correctamente.');
         } catch (\Exception $e) {
             return redirect()
                 ->back()

@@ -176,6 +176,12 @@ export interface ControlUsoEquipo {
     created_at?: string;
     updated_at?: string;
 }
+export interface Area_Responsable{
+    id:number;
+    nombre:string;
+    created_at?: string;
+    updated_at?: string;
+}
 export interface PaginatedData<T> {
     data: T[];
     current_page: number;
@@ -207,6 +213,7 @@ export interface PageProps{
     equipos: PaginatedData<Equipo>;
     control_uso: PaginatedData<ControlUso>;
     capacitadores: PaginatedData<Capacitador>;
+    area_responsables: PaginatedData<Area_Responsable>;
 }
 
 

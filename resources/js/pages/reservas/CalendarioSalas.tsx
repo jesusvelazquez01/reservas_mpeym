@@ -74,7 +74,7 @@ export default function CalendarioSala({
   reservas, 
   todasLasSalas, 
   responsables, 
-  capacitadores, 
+  capacitadores,
   flash, 
   errors 
 }: Props) {

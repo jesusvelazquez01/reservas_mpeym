@@ -1,7 +1,8 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, usePage, router, Link } from '@inertiajs/react';
 import { useState } from 'react';
-import { Pencil, Plus, Trash2, Building2, Edit } from 'lucide-react';
+import {  Plus, Trash2, Building2, Edit, HelpCircle, DoorOpen, Users } from 'lucide-react';
+
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { SimpleDataTable } from '@/components/ui/simple-data-table';
@@ -17,6 +18,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { BreadcrumbItem, Sala, PageProps } from '@/types';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const breadcrumbs: BreadcrumbItem[] = [
   { title: 'Gestión de Salas', href: '/salas' },
@@ -29,9 +31,38 @@ export default function Index() {
   const [selectedSala, setSelectedSala] = useState<Sala | null>(null);
 
   const columns: ColumnDef<Sala>[] = [
-    { accessorKey: 'nombre', header: 'Nombre' },
-    { accessorKey: 'capacidad', header: 'Capacidad' },
-    { accessorKey: 'ubicacion', header: 'Ubicación' },
+    { accessorKey: 'nombre', 
+      header: 'Nombre',
+            cell: ({ row }) => (
+                <div className="flex items-center gap-2">
+                    <DoorOpen className="h-4 w-4 text-orange-400" />
+                    <div>
+                        <p className="font-medium">
+                            {row.original.nombre}
+                        </p>
+                    </div>
+                </div>
+            ),
+
+    },
+    { accessorKey: 'capacidad',
+      header: 'Capacidad',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Users className="h-4 w-4 text-orange-400" />
+          <span className="text-sm">{row.original.capacidad}</span>
+        </div>
+      ),
+    },
+    { accessorKey: 'ubicacion',
+      header: 'Ubicación',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Building2 className="h-4 w-4 text-orange-400" />
+          <span className="text-sm">{row.original.ubicacion}</span>
+        </div>
+      ),
+    },
     {
       id: 'actions',
       header: 'Acciones',
@@ -82,17 +113,42 @@ export default function Index() {
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header principal */}
           <div className="text-align-left">
-            <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
-              <Building2 className="h-6 w-6 text-orange-400" />
-              Gestión de Salas
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400">
-              Administra las salas registradas en el sistema
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
+                  <Building2 className="h-6 w-6 text-orange-400" />
+                  Gestión de Salas
+                </h1>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Administra las salas registradas en el sistema
+                </p>
+              </div>
+               <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                      <HelpCircle className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>¿Qué es el módulo de Salas?</DialogTitle>
+                    <DialogDescription className="space-y-2">
+                      <p>
+                        Este módulo te permite gestionar las diferentes salas del ministerio.
+                      </p>
+                      <p className="font-semibold">Funcionalidades:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Crear nuevas salas</li>
+                        <li>Editar información de salas existentes</li>
+                        <li>Eliminar salas que ya no se utilizan</li>
+                      </ul>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+            </div>
           </div>
 
           {/* Card principal */}
-          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+          <Card className="shadow-lg border-2 border-orange-100 ">
             <CardHeader className="bg-gradient-to-r">
               <div className="flex justify-between items-center">
                 <div>

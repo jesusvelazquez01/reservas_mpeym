@@ -1,7 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import { useState } from 'react';
-import { Save, X, Pencil, Edit, Trash2 } from 'lucide-react';
+import { Save, X, Pencil, Edit, Trash2, Laptop } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -26,7 +26,6 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Equipos({ equipos, salas }: Props) {
     const [editingEquipo, setEditingEquipo] = useState<Equipo | null>(null);
-    const{auth}=usePage<PageProps>().props;
     
     const getEstadoColor = (estado: string) => {
         switch (estado?.toLowerCase()) {
@@ -107,6 +106,16 @@ export default function Equipos({ equipos, salas }: Props) {
         {
             accessorKey: 'marca',
             header: 'Marca',
+            cell: ({ row }) => (
+                <div className="flex items-center gap-2">
+                    <Laptop className="h-4 w-4 text-orange-400" />
+                    <div>
+                        <p className="font-medium">
+                            {row.original.marca}
+                        </p>
+                    </div>
+                </div>
+            ),
         },
         {
             accessorKey: 'modelo',

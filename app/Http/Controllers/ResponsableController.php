@@ -162,9 +162,10 @@ public function update(Request $request, Responsable $responsable)
 
 
     public function destroy(Responsable $responsable)
-    {
+{
         $responsable->delete();
-        return redirect()->route('responsables.index')
-        ->with('success', 'Responsable eliminado exitosamente.');;
-    }
+        return redirect()
+        ->route('responsables.index')
+        ->with('success', 'Responsable eliminado exitosamente.');
+}
 }

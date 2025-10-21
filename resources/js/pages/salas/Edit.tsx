@@ -4,15 +4,16 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
-import {  BreadcrumbItem, PageProps, Sala } from '@/types';
+import {  BreadcrumbItem, Sala } from '@/types';
 import { Head, router, useForm, usePage } from '@inertiajs/react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { CheckCircle2, Loader2, Pencil } from 'lucide-react';
+import { CheckCircle2, HelpCircle, Loader2, Pencil } from 'lucide-react';
 import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 
-interface EditProps extends PageProps {
-    sala: Sala;
+interface EditProps {
+    salas: Sala;
 }
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -55,13 +56,42 @@ export default function Edit() {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header principal */}
         <div className="text-align-left">
-          <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
-            <Pencil className="h-6 w-6 text-orange-400" />
-            Editar la Sala
-          </h1>
-          <p className="text-slate-600 dark:text-slate-400">
-            Editar la información de las salas disponibles
-          </p>
+          <div className="flex items-center justify-between">
+             <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
+                <Pencil className="h-6 w-6 text-orange-400" />
+                Editar la Sala
+              </h1>
+              <p className="text-slate-600 dark:text-slate-400">
+                Editar la información de las salas disponibles
+              </p>
+            </div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                      <HelpCircle className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>Módulo de Edición</DialogTitle>
+                    <DialogDescription className="space-y-2">
+                      <p className="">
+                        Este módulo te permite editar la sala seleccionada del ministerio.
+                      </p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Nombre: Sala de Conferencias</li>
+                        <li>Capacidad: 20</li>
+                        <li>Ubicación: Piso 1, Edificio A</li>
+                      </ul>
+                      <p className="font-semibold">
+                        No se permiten valores negativos
+                      </p>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+          </div>
+         
+          
         </div>
 
         {/* Card principal */}
@@ -80,7 +110,7 @@ export default function Edit() {
             <CardContent className="space-y-6 pt-6">
               {/* Nombre */}
               <div className="space-y-2">
-                <Label htmlFor="nombre" className="text-base font-semibold">
+                <Label htmlFor="nombre" className="text-base ">
                   Nombre de la Sala
                 </Label>
                 <Input
@@ -98,7 +128,7 @@ export default function Edit() {
 
               {/* Capacidad */}
               <div className="space-y-2">
-                <Label htmlFor="capacidad" className="text-base font-semibold">
+                <Label htmlFor="capacidad" className="text-base ">
                   Capacidad
                 </Label>
                 <Input
@@ -116,7 +146,7 @@ export default function Edit() {
 
               {/* Ubicación */}
               <div className="space-y-2">
-                <Label htmlFor="ubicacion" className="text-base font-semibold">
+                <Label htmlFor="ubicacion" className="text-base ">
                   Ubicación
                 </Label>
                 <Input

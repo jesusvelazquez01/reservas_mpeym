@@ -6,9 +6,10 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import {  BreadcrumbItem,} from '@/types';
 import { Head, router, useForm} from '@inertiajs/react';
-import {  CheckCircle2, Loader2, Plus } from 'lucide-react';
+import {  CheckCircle2, HelpCircle, Loader2, Plus } from 'lucide-react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Salas',
@@ -47,18 +48,45 @@ export default function Create() {
     return (
   <AppLayout breadcrumbs={breadcrumbs}>
     <Head title="Alta de Sala" />
-
     <div className="min-h-screen bg-gradient-to-br p-3">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header principal */}
         <div className="text-align-left">
-          <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
-            <Plus className="h-5 w-5 text-orange-400" />
-            Alta de Sala
-          </h1>
-          <p className="text-slate-600 dark:text-slate-400">
-            Registra la información de las salas disponibles
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
+                <Plus className="h-5 w-5 text-orange-400" />
+                Alta de Sala
+              </h1>
+              <p className="text-slate-600 dark:text-slate-400">
+                Registra la información de las salas disponibles
+              </p>
+            </div>
+           <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                      <HelpCircle className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>Módulo de Alta</DialogTitle>
+                    <DialogDescription className="space-y-2">
+                      <p>
+                        Este módulo te permite dar de alta las diferentes salas del ministerio.
+                      </p>
+                      <p className="font-semibold">Carga Correcta de la Sala:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Nombre: Sala de Conferencias</li>
+                        <li>Capacidad: 20</li>
+                        <li>Ubicación: Piso 1, Edificio A</li>
+                      </ul>
+                      <p className="font-semibold">
+                        No se permiten valores negativos
+                      </p>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+          </div>
+          
         </div>
 
         {/* Card principal */}
@@ -77,7 +105,7 @@ export default function Create() {
             <CardContent className="space-y-6 pt-6">
               {/* Nombre */}
               <div className="space-y-2">
-                <Label htmlFor="nombre" className="text-base font-semibold">
+                <Label htmlFor="nombre" className="text-base">
                   Nombre de la Sala
                 </Label>
                 <Input
@@ -95,7 +123,7 @@ export default function Create() {
 
               {/* Capacidad */}
               <div className="space-y-2">
-                <Label htmlFor="capacidad" className="text-base font-semibold">
+                <Label htmlFor="capacidad" className="text-base ">
                   Capacidad
                 </Label>
                 <Input
@@ -113,7 +141,7 @@ export default function Create() {
 
               {/* Ubicación */}
               <div className="space-y-2">
-                <Label htmlFor="ubicacion" className="text-base font-semibold">
+                <Label htmlFor="ubicacion" className="text-base">
                   Ubicación
                 </Label>
                 <Input

@@ -4,7 +4,9 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import {CalendarPlus2, UserRoundSearch, LaptopMinimalCheck, Folder, Calendar, ClipboardPlus, DoorOpen, MessageCircleWarning, Laptop, ShieldPlus,ShieldBan,UserRound, Settings, ChevronDown } from 'lucide-react';
+import {CalendarPlus2, UserRoundSearch, LaptopMinimalCheck, Folder, Calendar, ClipboardPlus, DoorOpen, MessageCircleWarning, Laptop, ShieldPlus,ShieldBan,UserRound, Settings, ChevronDown,
+    LandPlot
+ } from 'lucide-react';
 import AppLogo from './app-logo';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 // ===== SECCIÓN PRINCIPAL =====
@@ -25,11 +27,18 @@ const gestionRecursosItems: NavItem[] = [
         icon: DoorOpen,
         // permission: 'salas.view'
     },
+    
     {
         title: 'Equipos',
         href: '/equipos',
         icon: Laptop,
         // permission: 'equipos.view'
+    },
+    {
+        title: 'Área',
+        href: '/areas',
+        icon: LandPlot,
+        // permission: 'responsables.view'
     },
     {
         title: 'Jefes de Área',

@@ -7,6 +7,7 @@ use App\Models\Reserva;
 use App\Models\Sala;
 use App\Models\User;
 use App\Models\Responsable;
+use App\Models\Area;
 use App\Models\Capacitador;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -62,13 +63,14 @@ class ReservaController extends Controller
                 'puedeEditar' => Auth::id() === $reserva->user_id
             ];
         });
-
+        //Pasarle datos de las areas para que mapee en lugar de entidad
         return Inertia::render('reservas/CalendarioSalas', [
             'sala' => $sala,
             'reservas' => $reservas,
             'todasLasSalas' => Sala::select('id', 'nombre')->get(),
             'responsables' => Responsable::select('id', 'nombre', 'apellido', 'dni')->get(),
             'capacitadores' => Capacitador::select('id', 'nombre', 'apellido', 'dni')->get(),
+            'areas' => Area::select('id', 'nombre')->get(),
         ]);
     }
 

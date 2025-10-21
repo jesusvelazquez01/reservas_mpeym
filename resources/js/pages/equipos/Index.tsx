@@ -3,7 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Equipo, PageProps, type BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Edit, Laptop2, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Calendar, DoorOpen, Edit, HelpCircle, Laptop, Laptop2,  MonitorCog,  Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import {
   AlertDialog,
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { SimpleDataTable } from '@/components/ui/simple-data-table';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const breadcrumbs: BreadcrumbItem[] = [
   {
@@ -42,8 +43,33 @@ export default function Index() {
   };
 
   const columns: ColumnDef<Equipo>[] = [
-    { accessorKey: 'marca', header: 'Marca' },
-    { accessorKey: 'modelo', header: 'Modelo' },
+    { accessorKey: 'marca',
+       header: 'Marca',
+         cell: ({ row }) => (
+                <div className="flex items-center gap-2">
+                    <Laptop className="h-4 w-4 text-orange-400" />
+                    <div>
+                        <p className="font-medium">
+                            {row.original.marca}
+                        </p>
+                    </div>
+                </div>
+            ),
+      
+    },
+    { accessorKey: 'modelo',
+      header: 'Modelo',
+      cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <Laptop2 className="h-4 w-4 text-orange-400" />
+          <div>
+            <p className="font-medium">
+              {row.original.modelo}
+            </p>
+          </div>
+        </div>
+      ),
+    },
     {
       accessorKey: 'estado_inicial',
       header: 'Estado',
@@ -55,18 +81,64 @@ export default function Index() {
         </span>
       ),
     },
-    { accessorKey: 'sistema_operativo', header: 'S.O.' },
-    { accessorKey: 'fecha_adquisicion', header: 'F. Adquisición' },
+    { accessorKey: 'sistema_operativo',
+       header: 'S.O.',
+       cell: ({ row }) => (
+        <div className="flex items-center gap-2">
+          <MonitorCog className="h-4 w-4 text-orange-400" />
+          <div>
+            <p className="font-medium">
+              {row.original.sistema_operativo}
+            </p>
+          </div>
+        </div>
+      ),
+   },
+    { accessorKey: 'fecha_adquisicion',
+       header: 'F. Adquisición',
+                  cell: ({ row }) => (
+                <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-orange-400" />
+                    <span className="text-sm">{row.original.fecha_adquisicion}</span>
+                </div>
+            ),
+      },
     {
       accessorKey: 'fecha_baja',
       header: 'F. Baja',
       cell: ({ row }) => (
-        <span className={row.original.fecha_baja ? 'text-red-600 font-medium' : ''}>
-          {row.original.fecha_baja || '-'}
-        </span>
+                        <div className="max-w-xs">
+                    {row.original.fecha_baja ? (
+                        <div className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4 text-orange-400" />
+                            <p
+                                className="font-medium text-black"
+                                title={row.original.fecha_baja}
+                            >
+                                {row.original.fecha_baja}
+                            </p>
+                        </div>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-sm">
+                            Sin fecha de baja
+                        </span>
+                    )}
+                  </div>
       ),
     },
-    { accessorKey: 'sala.nombre', header: 'Sala' },
+    { accessorKey: 'sala.nombre', 
+      header: 'Sala',
+                cell: ({ row }) => (
+                <div className="flex items-center gap-2">
+                    <DoorOpen className="h-4 w-4 text-orange-400" />
+                    <div>
+                        <p className="font-medium">
+                            {row.original.sala?.nombre}
+                        </p>
+                    </div>
+                </div>
+            ),
+    },
     {
       id: 'actions',
       header: 'Acciones',
@@ -119,13 +191,38 @@ export default function Index() {
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header principal */}
           <div className="text-align-left">
-            <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
-              <Laptop2 className="h-6 w-6 text-orange-400" />
-              Gestión de Equipos
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400">
-              Administra los equipos informáticos registrados en el sistema
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
+                    <Laptop2 className="h-6 w-6 text-orange-400" />
+                    Gestión de Equipos
+                  </h1>
+                  <p className="text-slate-600 dark:text-slate-400">
+                    Administra los equipos informáticos registrados en el sistema
+                  </p>
+              </div>
+              <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                      <HelpCircle className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>¿Qué es el módulo de Equipos?</DialogTitle>
+                    <DialogDescription className="space-y-2">
+                      <p>
+                        Este módulo te permite gestionar los diferentes equipos  del ministerio.
+                      </p>
+                      <p className="font-semibold">Funcionalidades:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Crear nuevos equipos</li>
+                        <li>Editar información de los equipos existentes</li>
+                        <li>Eliminar equipos que ya no se utilizan o poner su fecha de baja</li>
+                      </ul>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+            </div>
           </div>
 
           {/* Card principal */}

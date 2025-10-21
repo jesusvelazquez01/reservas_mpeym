@@ -105,6 +105,9 @@ class CapacitadorController extends Controller
             'dni' => 'nullable|string|max:255',
             'telefono' => 'nullable|string|max:255',
             'correo' => 'nullable|email|max:255',
+        ],[
+            'nombre'=> 'El nombre es requerido.',
+            'apellido' => 'El apellido es requerido.',
         ]);
 
         // Verificar duplicados (excluyendo el registro actual)

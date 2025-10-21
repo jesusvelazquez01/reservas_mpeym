@@ -1,6 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { Head, usePage, Link, router, useForm } from '@inertiajs/react';
-import { Trash2, Plus,  Users, Edit } from 'lucide-react';
+import { Trash2, Plus,  Users, Edit, HelpCircle, User, FileDigit, PhoneOutgoing, MailCheck } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -27,11 +27,98 @@ export default function Index() {
   };
 
   const columns: ColumnDef<Capacitador>[] = [
-    { accessorKey: 'nombre', header: 'Nombre' },
-    { accessorKey: 'apellido', header: 'Apellido' },
-    { accessorKey: 'dni', header: 'D.N.I' },
-    { accessorKey: 'telefono', header: 'Teléfono' },
-    { accessorKey: 'correo', header: 'Correo' },
+    { accessorKey: 'nombre',
+       header: 'Nombre',
+                cell: ({ row }) => (
+                <div className="flex items-center gap-2">
+                    <User className="h-4 w-4 text-orange-400" />
+                    <div>
+                        <p className="font-medium">
+                            {row.original.nombre}
+                        </p>
+                    </div>
+                </div>
+            ),
+    },
+    { accessorKey: 'apellido',
+       header: 'Apellido',
+                cell: ({ row }) => (
+                <div className="flex items-center gap-2">
+                   
+                    <div>
+                        <p className="font-medium">
+                            {row.original.apellido}
+                        </p>
+                    </div>
+                </div>
+            ),
+     },
+    { accessorKey: 'dni',
+      header: 'D.N.I',
+               cell: ({ row }) => (
+                  <div className="max-w-xs">
+                    {row.original.dni ? (
+                        <div className="flex items-center gap-1">
+                            <FileDigit className="h-4 w-4 text-orange-400" />
+                            <p
+                                className="font-medium text-black"
+                                title={row.original.dni}
+                            >
+                                {row.original.dni}
+                            </p>
+                        </div>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-sm">
+                            Sin D.N.I.
+                        </span>
+                    )}
+                  </div>
+            ),
+    },
+    { accessorKey: 'telefono', 
+      header: 'Teléfono',
+              cell: ({ row }) => (
+                <div className="max-w-xs">
+                    {row.original.telefono ? (
+                        <div className="flex items-center gap-1">
+                            <PhoneOutgoing className="h-4 w-4 text-orange-400" />
+                            <p
+                                className="font-medium text-black"
+                                title={row.original.telefono}
+                            >
+                                {row.original.telefono}
+                            </p>
+                        </div>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-sm">
+                            Sin telefono
+                        </span>
+                    )}
+                </div>
+            ),
+    },
+    { accessorKey: 'correo',
+      header: 'Correo',
+         cell: ({ row }) => (
+                <div className="max-w-xs">
+                    {row.original.correo ? (
+                        <div className="flex items-center gap-1">
+                            <MailCheck  className="h-4 w-4 text-orange-400" />
+                            <p
+                                className="font-medium text-black"
+                                title={row.original.correo}
+                            >
+                                {row.original.correo}
+                            </p>
+                        </div>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-sm">
+                            Sin correo
+                        </span>
+                    )}
+                  </div>
+            ),
+    },
     {
       id: 'actions',
       header: 'Acciones',
@@ -87,13 +174,38 @@ export default function Index() {
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header */}
           <div className="text-align-left">
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
-              <Users className="h-5 w-5 text-orange-400" />
-              Gestión de Capacitadores
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400">
-              Administra la lista de capacitadores del sistema.
-            </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+                  <Users className="h-5 w-5 text-orange-400" />
+                  Gestión de Capacitadores
+                </h1>
+                <p className="text-slate-600 dark:text-slate-400">
+                  Administra la lista de capacitadores del sistema.
+                </p>
+              </div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="icon" className="rounded-full">
+                      <HelpCircle className="h-5 w-5" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>¿Qué es el módulo de Capacitadores?</DialogTitle>
+                    <DialogDescription className="space-y-2">
+                      <p>
+                        Este módulo te permite gestionar los diferentes capacitadores del ministerio.
+                      </p>
+                      <p className="font-semibold">Funcionalidades:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        <li>Crear nuevos capacitadores</li>
+                        <li>Editar información de los capacitadores existentes</li>
+                        <li>Eliminar capacitadores que ya no son parte del ministerio</li>
+                      </ul>
+                    </DialogDescription>
+                  </DialogContent>
+                </Dialog>
+            </div>
           </div>
 
           {/* Card principal */}

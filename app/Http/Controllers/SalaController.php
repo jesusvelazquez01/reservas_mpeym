@@ -73,6 +73,12 @@ class SalaController extends Controller
             'nombre' => 'required|string|max:255',
             'capacidad' => 'required|integer|min:1',
             'ubicacion' => 'required|string|max:255',
+        ],[
+             'nombre.required' => 'El nombre es requerido',
+            'capacidad.required' => 'La capacidad es requerida',
+            'ubicacion.required' => 'La ubicación es requerida',
+            'capacidad.integer' => 'La capacidad debe ser un número entero',
+            'capacidad.min' => 'La capacidad debe ser al menos 1',
         ]);
 
         $sala->update($request->all());
