@@ -226,7 +226,7 @@ export default function Index() {
           </div>
 
           {/* Card principal */}
-          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+          <Card className="shadow-lg border-2 border-orange-100">
             <CardHeader className="bg-gradient-to-r">
               <div className="flex justify-between items-center">
                 <div>

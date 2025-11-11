@@ -81,7 +81,7 @@ export default function Index({ roles }: Props) {
                     <div className="text-align-left">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+                                <h1 className="text-2xl font-bold bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
                                     <Shield className="h-6 w-6 text-orange-400" />
                                     Gestión de Roles
                                 </h1>
@@ -130,7 +130,7 @@ export default function Index({ roles }: Props) {
                     </div>
 
                     {/* Card principal */}
-                    <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+                    <Card className="shadow-lg border-2 border-orange-100 ">
                         <CardHeader className="bg-gradient-to-r">
                             <CardTitle className="flex items-center gap-2 text-orange-400">
                                 <Shield className="h-5 w-5 text-orange-400" />

@@ -176,7 +176,7 @@ export default function Create() {
             </div>
           </div>
 
-          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+          <Card className="shadow-lg border-2 border-orange-100">
             
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-orange-400">

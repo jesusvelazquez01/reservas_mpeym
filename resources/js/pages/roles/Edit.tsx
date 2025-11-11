@@ -105,7 +105,7 @@ export default function Edit() {
                     <div className="text-align-left">
                         <div className="flex items-center justify-between">
                             <div>
-                                <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+                                <h1 className="text-2xl font-bold bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
                                     <Pencil className="h-5 w-5 text-orange-400" />
                                     Editar Rol: {role.name}
                                 </h1>
@@ -156,7 +156,7 @@ export default function Edit() {
                     </div>
 
                     {/* Card de permisos */}
-                    <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+                    <Card className="shadow-lg border-2 border-orange-100 ">
                         <CardHeader className="bg-gradient-to-r">
                             <CardTitle className="flex items-center gap-2 text-orange-400">
                                 <ShieldCheck className="h-5 w-5 text-orange-400" />
@@ -176,7 +176,7 @@ export default function Edit() {
                                 >
                                     <div className="flex items-center gap-2 mb-3">
                                         <Shield className="h-5 w-5 text-orange-400" />
-                                        <h2 className="text-lg font-semibold capitalize text-orange-600 dark:text-orange-400">
+                                        <h2 className="text-lg font-semibold capitalize text-orange-400 dark:text-orange-400">
                                             {entity}
                                         </h2>
                                     </div>
@@ -197,7 +197,7 @@ export default function Edit() {
                                                             !!checked
                                                         )
                                                     }
-                                                    className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500"
+                                                    className="border-orange-400"
                                                 />
                                                 <label
                                                     htmlFor={`perm-${permission.id}`}

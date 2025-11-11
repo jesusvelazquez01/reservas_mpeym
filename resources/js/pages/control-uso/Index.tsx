@@ -176,7 +176,7 @@ export default function Index() {
           <div className="text-align-left">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+                <h1 className="text-2xl font-bold bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
                   <ClipboardList className="h-6 w-6 text-orange-400" />
                   Control de Uso
                 </h1>
@@ -210,7 +210,7 @@ export default function Index() {
           </div>
 
           {/* Card principal */}
-          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+          <Card className="shadow-lg border-2 border-orange-100">
             <CardHeader>
               <div className="flex justify-between items-center">
                 <div>

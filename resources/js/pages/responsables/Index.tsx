@@ -65,7 +65,7 @@ export default function Index() {
                         <div className="flex items-center gap-1">
                             <FileDigit className="h-4 w-4 text-orange-400" />
                             <p
-                                className="font-medium text-black"
+                                className="font-medium "
                                 title={row.original.dni}
                             >
                                 {row.original.dni}
@@ -87,7 +87,7 @@ export default function Index() {
                         <div className="flex items-center gap-1">
                             <PhoneOutgoing className="h-4 w-4 text-orange-400" />
                             <p
-                                className="font-medium text-black"
+                                className="font-medium"
                                 title={row.original.telefono}
                             >
                                 {row.original.telefono}
@@ -110,7 +110,7 @@ export default function Index() {
                         <div className="flex items-center gap-1">
                             <MailCheck  className="h-4 w-4 text-orange-400" />
                             <p
-                                className="font-medium text-black"
+                                className="font-medium"
                                 title={row.original.correo}
                             >
                                 {row.original.correo}
@@ -132,7 +132,7 @@ export default function Index() {
                         <div className="flex items-center gap-1">
                             <Grid2x2   className="h-4 w-4 text-orange-400" />
                             <p
-                                className="font-medium text-black"
+                                className="font-medium "
                                 title={row.original.area}
                             >
                                 {row.original.area}
@@ -206,13 +206,13 @@ export default function Index() {
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="Gestión de Responsables" />
 
-      <div className="min-h-screen bg-gradient-to-br p-3">
+      <div className="min-h-screen  p-3">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* Header principal */}
           <div className="text-align-left">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent flex items-center gap-2">
+                    <h1 className="text-2xl font-bold bg-orange-400 bg-clip-text text-transparent flex items-center gap-2">
                       <Users className="h-5 w-5 text-orange-400" />
                       Gestión de Responsables
                     </h1>
@@ -248,7 +248,7 @@ export default function Index() {
           </div>
 
           {/* Card de tabla */}
-          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+          <Card className="shadow-lg border-2 border-orange-100">
             <CardHeader className="bg-gradient-to-r">
               <CardTitle className="flex items-center gap-2 text-orange-400">
                 <Users className="h-5 w-5 text-orange-400" />

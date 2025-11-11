@@ -95,7 +95,7 @@ export default function Edit() {
         </div>
 
         {/* Card principal */}
-        <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+        <Card className="shadow-lg border-2 border-orange-100">
           <CardHeader className="bg-gradient-to-r">
             <CardTitle className="flex items-center gap-2 text-orange-400">
               <CheckCircle2 className="h-5 w-5 text-orange-400" />
