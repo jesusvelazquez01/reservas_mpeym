@@ -28,6 +28,7 @@ import {
     DialogTitle,
     DialogDescription,
 } from '@/components/ui/dialog';
+import { ResponsablesDataTable } from '@/components/ui/responsables-data-table';
 
 interface HistorialItem {
     id: number;
@@ -121,6 +122,13 @@ export default function HistorialEquipos({ historial }: Props) {
             ),
         },
         {
+            accessorKey: 'entidad',
+            header: 'Área',
+            cell: ({ row }) => (
+                <div className="text-sm">{row.original.entidad}</div>
+            ),
+        },
+        {
             accessorKey: 'responsable',
             header: 'Responsables',
             cell: ({ row }) => (
@@ -128,9 +136,6 @@ export default function HistorialEquipos({ historial }: Props) {
                     <Users className="h-4 w-4 text-orange-400" />
                     <div>
                         <p className="font-medium text-sm">{row.original.responsable}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {row.original.entidad}
-                        </p>
                         {row.original.capacitadores && (
                             <p className="text-xs text-blue-600 dark:text-blue-400">
                                 Capacitadores: {row.original.capacitadores}
@@ -145,13 +150,17 @@ export default function HistorialEquipos({ historial }: Props) {
             header: 'Estado Final',
             cell: ({ row }) => (
                 <div>
-                    {row.original.estado && (
+                    {row.original.estado ? (
                         <span
                             className={`px-2 py-1 rounded text-xs font-medium ${getEstadoColor(
                                 row.original.estado
                             )}`}
                         >
                             {row.original.estado}
+                        </span>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-xs">
+                            No se cargó
                         </span>
                     )}
                 </div>
@@ -162,13 +171,17 @@ export default function HistorialEquipos({ historial }: Props) {
             header: 'Estado Pantalla',
             cell: ({ row }) => (
                 <div>
-                    {row.original.estado_pantalla && (
+                    {row.original.estado_pantalla ? (
                         <span
                             className={`px-2 py-1 rounded text-xs font-medium ${getEstadoColor(
                                 row.original.estado_pantalla
                             )}`}
                         >
                             {row.original.estado_pantalla}
+                        </span>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-xs">
+                            No se cargó
                         </span>
                     )}
                 </div>
@@ -179,7 +192,7 @@ export default function HistorialEquipos({ historial }: Props) {
             header: 'Batería',
             cell: ({ row }) => (
                 <div>
-                    {row.original.nivel_bateria !== null && (
+                    {row.original.nivel_bateria !== null && row.original.nivel_bateria > 0 ? (
                         <div className="flex items-center gap-1">
                             <Battery
                                 className={`h-4 w-4 ${getBateriaColor(
@@ -194,6 +207,10 @@ export default function HistorialEquipos({ historial }: Props) {
                                 {row.original.nivel_bateria}%
                             </span>
                         </div>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-xs">
+                            No se cargó
+                        </span>
                     )}
                 </div>
             ),
@@ -203,19 +220,31 @@ export default function HistorialEquipos({ historial }: Props) {
             header: 'Acciones',
             cell: ({ row }) => (
                 <div className="flex flex-wrap gap-1">
-                    {row.original.se_encendio && (
+                    {row.original.se_encendio ? (
                         <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded text-xs">
                             Encendido
                         </span>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-xs">
+                            No se encendió
+                        </span>
                     )}
-                    {row.original.se_apago && (
+                    {row.original.se_apago ? (
                         <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded text-xs">
                             Apagado
                         </span>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-xs">
+                            No se apagó
+                        </span>
                     )}
-                    {row.original.se_conecto_a_cargar && (
+                    {row.original.se_conecto_a_cargar ? (
                         <span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded text-xs">
                             Cargado
+                        </span>
+                    ) : (
+                        <span className="text-gray-400 dark:text-gray-500 text-xs">
+                            No se conectó a cargar
                         </span>
                     )}
                 </div>

@@ -10,10 +10,8 @@ import { Undo2 } from 'lucide-react';
 import React, { useState } from 'react';
 import { toast } from 'sonner';
 import { Toaster } from 'sonner';
-import { entidad } from '@/constants/estados';
-import { cn } from '@/lib/utils';
 import { ResponsableAutocomplete } from '@/components/ui/responsable-autocomplete';
-import { type Sala, type Responsable, type Reserva, type PageProps, type Capacitador } from '@/types';
+import { type Sala, type Responsable, type Reserva, type PageProps, type Capacitador, type Area_Responsable } from '@/types';
 import {
   Dialog,
   DialogContent,
@@ -55,6 +53,7 @@ type ReservaCalendario = Reserva & {
 
 interface Props extends PageProps {
   sala: Sala;
+  areas: Area_Responsable[];
   reservas: ReservaCalendario[];
   todasLasSalas: Sala[];
   responsables: Responsable[];
@@ -72,6 +71,7 @@ function esReservaPasada(fecha: string) {
 export default function CalendarioSala({ 
   sala, 
   reservas, 
+  areas,
   todasLasSalas, 
   responsables, 
   capacitadores,
@@ -359,19 +359,28 @@ export default function CalendarioSala({
               <Select
                 value={data.entidad}
                 onValueChange={(value) => setData('entidad', value)}
-                disabled={processing}
+                disabled={processing || (modoEdicion && !data.puedeEditar)}
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Selecciona un área..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {entidad.map((area) => (
-                    <SelectItem key={area.value} value={area.value}>
-                      {area.label}
+                  {areas && areas.length > 0 ? (
+                    areas.map((area) => (
+                      <SelectItem key={area.id} value={area.nombre}>
+                        {area.nombre}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="" disabled>
+                      No hay áreas disponibles
                     </SelectItem>
-                  ))}
+                  )}
                 </SelectContent>
               </Select>
+              {formErrors?.entidad && (
+                <p className="text-sm text-destructive">{formErrors.entidad}</p>
+              )}
             </div>
 
             <div className="space-y-2">

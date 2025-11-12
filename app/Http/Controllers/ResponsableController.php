@@ -34,8 +34,9 @@ class ResponsableController extends Controller
     }
     public function create()
     {
-        return Inertia::render('responsables/Create');
-
+        return Inertia::render('responsables/Create', [
+            'areas' => \App\Models\Area::select('id', 'nombre')->get(),
+        ]);
     }
 
 
@@ -100,7 +101,8 @@ class ResponsableController extends Controller
     {
         $responsable = Responsable::findOrFail($id);
         return Inertia::render('responsables/Edit', [
-            'responsable' => $responsable
+            'responsable' => $responsable,
+            'areas' => \App\Models\Area::select('id', 'nombre')->get(),
         ]);
     }
 

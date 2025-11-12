@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { type BreadcrumbItem } from "@/types";
 import { Loader2, CheckCircle, XCircle, AlertTriangle, Clock, ChevronsUpDown, Check, UserPlus, HelpCircle } from "lucide-react";
-import { area } from "@/constants/estados";
+import { type Area_Responsable } from "@/types";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
@@ -40,7 +40,11 @@ const breadcrumbs: BreadcrumbItem[] = [
   { title: "Alta de Responsable", href: "" },
 ];
 
-export default function Create() {
+interface Props {
+  areas: Area_Responsable[];
+}
+
+export default function Create({ areas }: Props) {
   const { data, setData, post, processing, errors } = useForm({
     nombre: "",
     apellido: "",
@@ -293,7 +297,7 @@ export default function Create() {
                         className="w-full justify-between"
                         disabled={processing}
                       >
-                        {data.area ? area.find((a) => a.value === data.area)?.label : "Selecciona un área..."}
+                        {data.area ? areas.find((a) => a.nombre === data.area)?.nombre : "Selecciona un área..."}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </PopoverTrigger>
@@ -303,17 +307,17 @@ export default function Create() {
                         <CommandList>
                           <CommandEmpty>No hay áreas encontradas.</CommandEmpty>
                           <CommandGroup>
-                            {area.map((a) => (
+                            {areas.map((a) => (
                               <CommandItem
-                                key={a.value}
-                                value={a.value}
+                                key={a.id}
+                                value={a.nombre}
                                 onSelect={(v) => {
                                   setData("area", v);
                                   setAreaOpen(false);
                                 }}
                               >
-                                <Check className={cn("mr-2 h-4 w-4", data.area === a.value ? "opacity-100" : "opacity-0")} />
-                                {a.label}
+                                <Check className={cn("mr-2 h-4 w-4", data.area === a.nombre ? "opacity-100" : "opacity-0")} />
+                                {a.nombre}
                               </CommandItem>
                             ))}
                           </CommandGroup>

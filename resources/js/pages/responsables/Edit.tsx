@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { area } from "@/constants/estados";
+import { type Area_Responsable } from "@/types";
 import { cn } from "@/lib/utils";
 import {
   Loader2, Check, ChevronsUpDown, CheckCircle, XCircle, AlertTriangle, Clock, UserCog,
@@ -46,6 +46,7 @@ interface ValidationState {
 
 interface EditProps extends PageProps {
   responsable: Responsable;
+  areas: Area_Responsable[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -54,7 +55,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Edit() {
-  const { responsable } = usePage<EditProps>().props;
+  const { responsable, areas } = usePage<EditProps>().props;
   const { data, setData, put, processing, errors } = useForm({
     nombre: responsable.nombre || "",
     apellido: responsable.apellido || "",
@@ -349,7 +350,7 @@ export default function Edit() {
                         className="w-full justify-between"
                       >
                         {data.area
-                          ? area.find((a) => a.value === data.area)?.label
+                          ? areas.find((a) => a.nombre === data.area)?.nombre
                           : "Selecciona un área..."}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
@@ -360,10 +361,10 @@ export default function Edit() {
                         <CommandList>
                           <CommandEmpty>No hay áreas encontradas.</CommandEmpty>
                           <CommandGroup>
-                            {area.map((a) => (
+                            {areas.map((a) => (
                               <CommandItem
-                                key={a.value}
-                                value={a.value}
+                                key={a.id}
+                                value={a.nombre}
                                 onSelect={(v) => {
                                   setData("area", v);
                                   setAreaOpen(false);
@@ -372,10 +373,10 @@ export default function Edit() {
                                 <Check
                                   className={cn(
                                     "mr-2 h-4 w-4",
-                                    data.area === a.value ? "opacity-100" : "opacity-0"
+                                    data.area === a.nombre ? "opacity-100" : "opacity-0"
                                   )}
                                 />
-                                {a.label}
+                                {a.nombre}
                               </CommandItem>
                             ))}
                           </CommandGroup>
