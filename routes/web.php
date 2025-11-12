@@ -32,7 +32,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])
+    Route::get('/calendario', [DashboardController::class, 'index'])
         ->name('dashboard');
 });
 Route::middleware(['auth'])->group(function () {

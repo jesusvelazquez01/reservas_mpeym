@@ -115,7 +115,7 @@ export default function Create({ reservas, equipos }: Props) {
           </div>
 
           {/* CARD PRINCIPAL: Reserva */}
-          <Card className="shadow-lg border-2 border-orange-100 dark:border-orange-900">
+          <Card className="shadow-lg border-2 border-orange-100">
             <CardHeader className="bg-gradient-to-r">
               <CardTitle className="flex items-center gap-2 text-orange-400">
                 <ClipboardList className="h-5 w-5 text-orange-400" />
@@ -154,9 +154,9 @@ export default function Create({ reservas, equipos }: Props) {
                 </Select>
 
                 {fueUtilizada === 'No' && (
-                  <Alert className="border-orange-400 bg-orange-50 dark:bg-orange-950">
+                  <Alert className="border-orange-400 bg-orange-50">
                     <AlertCircle className="h-4 w-4 text-orange-600" />
-                    <AlertDescription className="text-orange-800 dark:text-orange-200">
+                    <AlertDescription className="text-orange-800">
                       Por favor, detalla en observaciones por qué no fue utilizada.
                     </AlertDescription>
                   </Alert>
@@ -170,7 +170,7 @@ export default function Create({ reservas, equipos }: Props) {
                   value={observaciones}
                   onChange={(e) => setObservaciones(e.target.value)}
                   placeholder="Observaciones sobre el uso de la sala..."
-                  className="focus-visible:ring-orange-50 resize-none"
+                  className="focus-visible:ring-orange-300"
                   rows={4}
                 />
               </div>
@@ -183,7 +183,7 @@ export default function Create({ reservas, equipos }: Props) {
             const equipoData = equiposSeleccionados.find(e => e.equipo_id === equipo.id);
 
             return (
-              <Card key={equipo.id} className={`shadow-lg border-2 border-orange-100 dark:border-orange-900 transition-all ${isSelected ? 'border-orange-400 shadow-md' : ''}`}>
+              <Card key={equipo.id} className={`shadow-lg border-2 border-orange-100 transition-all ${isSelected ? 'border-orange-100 shadow-md' : ''}`}>
                 <CardHeader className="bg-gradient-to-r">
                   <CardTitle className="flex items-center gap-2 text-orange-400">
                     <Monitor className="h-5 w-5 text-orange-400" />
@@ -271,7 +271,7 @@ export default function Create({ reservas, equipos }: Props) {
                           value={equipoData.observaciones_equipo}
                           onChange={(e) => updateEquipoData(equipo.id, 'observaciones_equipo', e.target.value)}
                           placeholder="Detalles específicos sobre este equipo..."
-                          className="resize-none border-orange-200"
+                          className="focus-visible:ring-orange-300"
                           rows={2}
                         />
                       </div>

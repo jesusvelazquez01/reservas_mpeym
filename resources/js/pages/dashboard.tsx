@@ -9,8 +9,8 @@ import { ColumnDef } from '@tanstack/react-table';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
+        title: 'Calendario',
+        href: '/calendario',
     },
 ];
 
